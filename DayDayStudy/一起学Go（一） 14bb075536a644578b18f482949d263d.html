@@ -1,0 +1,775 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>一起学Go（一）</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="14bb0755-36a6-4457-8b18-f482949d263d" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/met_william_morris_1875.jpg" style="object-position:center 0%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">👾</span></div><h1 class="page-title">一起学Go（一）</h1></header><div class="page-body"><h1 id="5d163ea0-5d32-4214-a6e5-3c41f5abdc38" class="">开始前准备一下</h1><h2 id="012c5536-148e-4188-93be-9315d5240678" class="">安装</h2><h3 id="fd744d4b-1b04-4290-8443-ceb32e8cce58" class="">下载</h3><p id="f568f6b0-0d39-4a6d-8350-3395d24dbdad" class=""><a href="https://golang.google.cn/dl/">下载连接</a></p><p id="fe1958a8-d381-43ef-99b1-712d6f63f20c" class="">windows 版本安装到一个比较好找的目录,比如 F:/Go</p><h3 id="9d653337-1246-4774-8b4e-0f165fdfd1d0" class="">配置Go PATH</h3><p id="a0ea95a0-93b6-43a1-8e81-1954e78faefa" class="">添加环境变量GOPATH，写入一个路径，这里是你写代码的地方，用户变量下也有GOPATH【有默认值】，需要更新一下</p><p id="f8bfca21-72bf-424c-bbeb-e760c9137e8f" class="">新建 bin, pkg, src.</p><p id="fae43a14-bd4e-412a-aa40-3ee0387d8c02" class="">bin路径加入PATH</p><p id="92623424-4096-4a1a-b8a1-6e97dc5393a0" class="">添加GOROOT 并设置为GO安装的目录（这里是自己出了问题才加上的）</p><blockquote id="8e4523f5-5423-4a1f-be58-c771cbef2fce" class="">使用 go env 检查环境配置是否正确</blockquote><h2 id="874b61f2-9cef-40dc-9b6f-d953deac7f47" class="">目录结构</h2><ul id="5f68a11b-c33f-42bc-8065-a7153f73fe82" class="bulleted-list"><li style="list-style-type:disc">bin 存放编译后的二进制文件</li></ul><ul id="e9f934e4-6ec3-45b3-b4d8-137adfa5055d" class="bulleted-list"><li style="list-style-type:disc">pkg存放编译后的库文件</li></ul><ul id="155f7d1e-4a81-48b7-86e3-aa77d1c21bae" class="bulleted-list"><li style="list-style-type:disc">src是放源代码的地方</li></ul><p id="d1df2ea6-004f-44e7-9b6a-78bb19c1cd86" class="">再src下以网站的形式构建文件夹： 比如创建 jelech.top 名字的文件夹。 这里实际上是写的仓库连接名，所以可以写入github的连接地址</p><p id="abb8bd39-fb62-4c4c-b226-7098dcfd3db6" class="">在jelech.top下创建作者名，比如jelech</p><p id="01de549a-31a0-43e9-8f72-2106d6a68f35" class="">在作者名下创建项目名</p><h2 id="fc98e3f9-d65b-462c-bcc0-2b8157a0f0c2" class="">IDE，用VSCODE，不多说了</h2><ul id="0adbc679-daa1-4a32-b008-57592243b828" class="bulleted-list"><li style="list-style-type:disc">安装中文插件</li></ul><ul id="8416154c-bdf5-4a59-afb1-8fe3d542dbf2" class="bulleted-list"><li style="list-style-type:disc">安装GO插件<ul id="87f1f63e-391f-44f0-a6b5-b25848bf43a6" class="bulleted-list"><li style="list-style-type:circle">在写go时候，vscode会提示安装各种插件。而由于墙的原因会下载失败。需手动下载安装</li></ul><ul id="1f4e0960-816f-4df6-9a13-0f03ca7e445c" class="bulleted-list"><li style="list-style-type:circle"><a href="https://github.com/golang/tools/releases">从release下载src包</a></li></ul><ul id="564e62ff-fd83-4d3b-a111-941586ad390d" class="bulleted-list"><li style="list-style-type:circle">再额外从lint直接拉取 <code>git clone https://github.com/golang/lint.git</code> </li></ul><ul id="426dee1c-b935-4a33-823f-365aca61a15f" class="bulleted-list"><li style="list-style-type:circle">到src的根目录，也就是GOPATH上运行 <code>go install golang.org/x/lint</code></li></ul><ul id="0abbd237-a4a1-4ca4-8d28-aca89451b4f9" class="bulleted-list"><li style="list-style-type:circle">重新运行的时候安装就能成功。还是不行就手动复制到cmd中</li></ul></li></ul><h2 id="9ced5c6f-7951-4022-95d7-4da1173a7efb" class="">编译</h2><p id="b468d8d3-d39f-4075-b436-b754010a0fda" class=""><code>go build</code> 编译到当前目录 -o 重新定义名字，默认名为项目名【文件夹】</p><p id="21a42463-e6cc-4e69-a276-029c67faed18" class=""><code>go run path</code> 可以直接编译完成后直接运行，但没有保存</p><p id="651e1fe9-7e9f-4955-8422-8e8986ec8c86" class=""><code>go install</code> 编译完成后放到GOPATH/bin路径下</p><h3 id="b7843193-6b6c-4d13-b7a4-f5fb17517ee2" class="">交叉编译</h3><p id="2d6e9d1b-33a1-45a0-9846-f8657c3ef54a" class="">交叉编译代表在一个平台编译其他平台的代码，需要设置一些东西：</p><pre id="46ae4ad4-8f47-4d18-b46c-9e6dfe335f0d" class="code code-wrap"><code>SET CGO_ENABLED=0   # 禁用CGO
+SET GOOS=linux      # 目标平台
+SET GOARCH=amd64    # 目标处理架构为amd64</code></pre><h2 id="3fca3ba0-db29-4875-950c-31ab4aef216b" class="">GO辅助命令</h2><p id="0b3a330e-1fd8-4d88-ad1c-4626e667d974" class=""><code>go doc builtin.delete</code> 查看内置的go文档</p><h1 id="94e46d89-9e31-4b8d-b030-423b2236b405" class="">GO基础</h1><p id="02b96839-3d3d-4619-90df-a208c05bc40f" class=""><code>package main</code> 当前包名</p><p id="17d01762-2afb-4e35-8618-51b39bc433ee" class=""><code>import &quot;name&quot;</code> 导入其他包</p><p id="4bde2ded-a165-42b6-9fb2-ef1dda330894" class="">只可以可设置全局变量、函数。和python<strong>不一样</strong>, 他是和c++一样，main函数等。</p><h2 id="6435a606-6f7b-49da-822c-7899125ddfcb" class="">变量与常量</h2><blockquote id="29d46dbf-d336-4b12-a338-bf56cfa87013" class="">标识符和其他语言一样</blockquote><h3 id="f71893f8-d7d2-4e18-b0e5-3349df56f98d" class="">关键字</h3><p id="4a450a51-d883-4299-996c-010796397c13" class="">大部分和其他语言差不多，有一些特殊的，比如<code>select, defer, func, chan...</code></p><h3 id="49bdbc11-ec80-4cbb-b39c-cd000577bff4" class="">变量声明再使用</h3><p id="465011f3-0ee6-46ce-b969-db4d3f32cc92" class="">go语言中变量声明后<strong>必须使用</strong></p><p id="c5ccc16a-4a74-45ba-a067-ccfa48e6197e" class=""><code>var name string</code> 声明一个保存字符串类型的变量，名字为name</p><pre id="5e64074f-c895-4e97-b6df-71f90bb54d2a" class="code code-wrap"><code>// 批量声明
+var (
+    name string
+    age int
+    man bool
+)
+// 声明自动赋值【这里等号前的类型可以省略】
+var s1 = &quot;hi&quot;
+var i1 = 12
+
+// **函数内**使用简短变量声明
+s3 := &quot;hahah&quot;
+i2 := 15
+s1, s2 := 1, 2</code></pre><h3 id="4a29ede1-3c6b-4719-983e-c756f17c589a" class="">匿名变量</h3><p id="4b3f74c2-955a-4a32-875c-d22bcbaabbda" class="">一个下划线, 他不会占用空间，不会分配内存，所以不存在重复声明</p><h3 id="ebb61cab-7e1d-465a-abb0-4d18599faa04" class="">常量 const</h3><p id="709cdacd-a615-4407-afd4-132256cd5b57" class="">就是普通的常量，和c++类似性质 如果某一行没有写值，则表示和上面是一样的。这个只有在const的批量声明时可用</p><h3 id="9b5d8f0c-4c3c-4cdf-acce-863ae227920e" class="">iota常量计数器</h3><p id="b4ceb9b8-dffc-4062-b83c-8a094ad4ad75" class="">也就是可用代表为从0开始的enum, 一般使用在const批量声明中，每新增的一行时候，iota会自动+1 来用列子检测学习一下：</p><pre id="0238db0b-5a58-4ac6-b447-226873d2c6dc" class="code code-wrap"><code>const (
+    b1 = iota //0
+    b2 = iota //1
+    _
+    b3        // 3
+    b4 = 100  // 100
+    b5        // 100  记住和上面一样
+    b6 = iota // 6    记住iota是const每新增一行就+1
+)</code></pre><h2 id="f523f2d1-f85d-4ac1-b0f7-9e470c2b454a" class="">数据类型</h2><h3 id="d0b06758-88e7-4dd7-8666-cd57138fb740" class="">整型</h3><ul id="f78160bd-8e61-4a0f-8295-bb346a0232ee" class="bulleted-list"><li style="list-style-type:disc">int8</li></ul><ul id="087011fb-227c-4292-a86b-ab129b08fdc9" class="bulleted-list"><li style="list-style-type:disc">int16</li></ul><ul id="142fca05-12de-413e-a24a-721f1638291c" class="bulleted-list"><li style="list-style-type:disc">int32</li></ul><ul id="760138e7-81d4-4056-a6fe-91edbe32bda5" class="bulleted-list"><li style="list-style-type:disc">int64</li></ul><ul id="4c57184a-251a-4769-9ea0-4fd64e1dcf47" class="bulleted-list"><li style="list-style-type:disc">以上对应无符号uint**</li></ul><ul id="c6c15575-9fea-481e-97c5-f5a6f775c20a" class="bulleted-list"><li style="list-style-type:disc">uintptr 存放指针</li></ul><h3 id="8d53c01d-9b6f-4caf-a9a8-df76eff0de82" class="">进制</h3><p id="9e60ee2b-bea6-4242-ac63-cb1e3da1e03f" class="">无法直接定义二进制，八进制前为0，16进制前为0x</p><h3 id="bc05df0b-0e57-4458-bb7b-11e3f6d22569" class="">浮点</h3><p id="71fe54f6-1f60-4d82-a0f2-ccb86b51cc65" class="">32长度和64长度，默认为float64。不能直接赋值，需要强转函数</p><pre id="fb94de43-2992-4e4a-84d9-ac0fab1aa05f" class="code code-wrap"><code>f1 := 123.123
+</code></pre><h3 id="48fca1e5-00de-4c2d-a70c-4a5194b6720e" class="">复数</h3><p id="c89aaecb-750d-48f1-9a27-9bbaa7f5fbf3" class="">complex64 / complex128</p><h3 id="0767f61e-6324-4a2c-8145-27e973716caf" class="">布尔值</h3><p id="ef5d2ce2-1ee2-44bd-b9b7-d60f8af259ea" class="">Go中不能将整形转为布尔类型，不能参与数值运算</p><h3 id="f4687b4f-f5fc-417f-b3a2-72f285a378d7" class="">字符串</h3><p id="01b9084c-3c31-4014-827d-a174ff6ebf4b" class="">UTF-8编码，天然自动支持中文，<strong>只能用双引号</strong>包括，单引号包括是字符</p><blockquote id="eb6d6f14-fbe9-49d3-affa-80e718b6877d" class="">注意名字是strings，有个s</blockquote><ul id="a6daa375-98ce-4d9a-a9c8-06fcbadfed7a" class="bulleted-list"><li style="list-style-type:disc"><code>\</code> 为转义字符</li></ul><ul id="ed74405d-ed90-439c-bee0-1538a3997609" class="bulleted-list"><li style="list-style-type:disc"><code>&quot;</code>&quot;` esc下面的字符用于表示多行字符串和整个转义, 注意这个前缀会加入</li></ul><ul id="af2806fb-0ee6-4963-ace2-71ffe65bcd17" class="bulleted-list"><li style="list-style-type:disc"><code>+</code> 进行字符串拼接</li></ul><ul id="8118f314-3feb-4050-bb4b-632e67d30e7f" class="bulleted-list"><li style="list-style-type:disc"><code>strings.Split(string, str)</code> 按照str进行分割</li></ul><ul id="d93ebd55-1c2f-4724-b23d-de0513ee2e57" class="bulleted-list"><li style="list-style-type:disc"><code>strings.Contains(string, str)</code> 包含</li></ul><ul id="3f31f02b-7a3e-4315-b3bf-7d7ae65d462d" class="bulleted-list"><li style="list-style-type:disc"><code>strings.HasPrefix</code></li></ul><ul id="ce1b6a38-9ca1-4e6e-9e16-c8f50ec2949b" class="bulleted-list"><li style="list-style-type:disc"><code>strings.HasSuffix</code></li></ul><ul id="b6141701-37d5-41aa-abb1-a633c576727f" class="bulleted-list"><li style="list-style-type:disc"><code>strings.Index(str, c)</code> 某个字符的位置，从前往后第一个</li></ul><ul id="9bb2acf2-ce22-4731-8eb7-61ea6b0d2ba7" class="bulleted-list"><li style="list-style-type:disc"><code>strings.LastIndex(str, c)</code> 从后往前第一个</li></ul><ul id="3ca5f183-e61c-4ebb-a96a-9219c4980a7e" class="bulleted-list"><li style="list-style-type:disc"><code>strings.Join(ret[], c)</code> 字符串数组用c进行拼接起来</li></ul><ul id="29e4e28b-cc7a-4ece-acd2-c8996b8a9f0f" class="bulleted-list"><li style="list-style-type:disc">string 不可修改，必须强转为 <code>[]byte 或 []rune</code> 类型后再做修改</li></ul><ul id="c2b5524c-c8f4-4510-9bad-bb6a8872769e" class="bulleted-list"><li style="list-style-type:disc">单引号存的是int32的整数（中文字符）<pre id="ad129e46-6117-467f-915c-f0b5faae59fa" class="code code-wrap"><code>fmt.Printf(&quot;%T %T\n&quot;, &#x27;c&#x27;, &#x27;测&#x27;) // int32 int32</code></pre></li></ul><h3 id="485014f1-a93c-44df-b5c8-2e053457a31b" class="">打印</h3><p id="b66e7ece-e164-4a94-966d-e1692a43d333" class="">打印的时候对应 %b:2 %d:10 %o:8 %x:16 %T:类型 %v:打印值(任何类型)</p><pre id="22b31026-3f56-4bd9-971b-5ab549bafc71" class="code code-wrap"><code>import &quot;fmt&quot;
+fmt.Printf(&quot;name:%s&quot;, name) //可以格式化
+println(&quot;name:&quot;, name) // 只能序列打印
+s1 := fmt.Sprintf() // 格式化后返回为字符串</code></pre><h2 id="51e88835-6d8b-40ca-8f7a-e7a5788de42a" class="">判断</h2><p id="10f32ec7-a754-43df-b6b9-a88f3b2ebffe" class="">语句是python和c++的结合体，没有小括号，但有大括号</p><pre id="240cd824-e7bf-46ce-9c27-51d3007f6434" class="code code-wrap"><code>if 1 &gt; 0 {
+    println(&quot;Hello! Let&#x27;s Go0!&quot;)
+} else if 2 &gt; 1 {
+    println(&quot;Hello! Let&#x27;s Go1!&quot;)
+} else {
+    println(&quot;Hello! Let&#x27;s Go2!&quot;)
+}
+
+if age := 19; age &gt; 18 {
+    // 临时的age进行判断， 作用域只在if中
+}</code></pre><h2 id="6c1f825d-e06b-4ff9-8bd4-dd1cd3802f1b" class="">循环</h2><p id="8ea22f7d-e874-4996-a13a-18e305f8995f" class="">循环语句只有for语句，但是有很多的变种。break, continue正常使用</p><pre id="fcdfe38e-7e21-40b5-a5bd-956c33a93305" class="code code-wrap"><code>for i := 0; i &lt; 10; i++ { // go中没有++i
+}
+
+for i &lt; 10 {
+}
+
+for { // 无限循环
+}
+
+s := &quot;123hihi&quot;
+for k, v := range s { // 遍历数组
+}</code></pre><h2 id="db61b660-194d-457c-8f46-faf311748ab3" class="">switch语句</h2><pre id="c6101c05-a8af-4f79-a811-616f48c6d969" class="code code-wrap"><code>switch variable:=3;variable { // 赋值特性和上面的if所说的类似
+    case 1:
+        println(&quot;1&quot;)
+    case 2:
+        println(&quot;2&quot;)
+    default:
+        println(&quot;default&quot;)
+}
+
+switch {
+    case age &lt; 25:
+        println(25)
+    case age &gt; 60:
+        println(60)
+}
+
+fallthrough // 兼容c语言中的case穿透，意思是执行多个case</code></pre><h3 id="6c054cb4-0154-437f-bae8-f7fe169167aa" class="">goto</h3><blockquote id="d4aa88c0-98b4-42d5-8d26-04837d4de3fb" class="">不鼓励使用</blockquote><p id="c636af85-93c8-4318-8959-ec2e6d618b18" class="">设置一个标志位进行跳转</p><h2 id="fdfa2691-c7d2-4cab-8e32-b6fdc7e6415b" class="">运算符</h2><p id="aa819189-91df-4fd2-a72c-87bcb5992ba2" class=""><code>+ - * / %</code> 基本运算符</p><p id="e447f53b-9ed6-4314-ba5a-1718469053ca" class=""><code>++, --</code> 是语句，不能放到=右侧</p><p id="79c05701-f20f-4356-8193-e74774e98cce" class=""><code>== != &gt; &gt;= &lt; &lt;=</code> 返回布尔值</p><p id="f902a329-5586-4343-9234-b4713e3da167" class=""><code>&amp;&amp; || !</code> 基本逻辑运算</p><p id="be661a3f-66ba-40f7-917e-b43eb9b662ef" class=""><code>&amp; | ^ &lt;&lt; &gt;&gt;</code> 位运算符</p><p id="5c6e7745-02ce-4efc-a629-611a9cf6c142" class=""><code>= += -= *= /= %= &lt;&lt;= &gt;&gt;= &amp;= |= ^=</code> 基本赋值运算符</p><h2 id="2a162e3a-de8b-464b-8c88-ec30f87459a4" class="">复合数据类型</h2><h3 id="b6bc2cd8-f750-4021-93ab-69175c64857f" class="">数组</h3><p id="aa113ece-91f4-4020-8602-7939712b126d" class="">数组是值类型，赋值时会赋值一个新的过去</p><p id="1ba9ed1b-ad9a-4362-aedb-dfc6045ba869" class=""><code>len()</code> 求长度</p><pre id="ee0b4bc8-5d31-476a-8e47-428e1b2c5cff" class="code code-wrap"><code>var a [3]int // 存放大小为10，类型为int的数组
+
+// 初始化
+a = [3]int{1, 2, 3} //末尾补0
+b := [...]int{1, 2, 3, 4} // 根据初始值自动推断
+c := [5]int {0:1, 4:2} // 1,0,0,0,2 用【位置：值】赋值
+x := [...]int{0: 1, 5: 2} // 中间自动添0
+
+// 多维数组
+d := [1][2]int{
+    [2]int{1, 2}
+} // 3*2 的数组， 3行2列</code></pre><h3 id="71efc9f9-9fd6-4475-98ba-0b7b716199d4" class="">切片</h3><blockquote id="ec79b56f-9e95-42f4-9b46-5d3f7ba2bffb" class="">数组上做的一层封装，是一个可变长度的序列</blockquote><ul id="ec93e2c7-58be-4785-a2e9-2b5560b570e8" class="bulleted-list"><li style="list-style-type:disc">切片本质就是框住了一块<strong>连续</strong>的内存，所以在对切片的任何修改时，会影响到整个内存映射的数组上</li></ul><ul id="1cb8a04f-adfe-4dc8-af12-5ca5199e8d68" class="bulleted-list"><li style="list-style-type:disc">切片不能直接比较</li></ul><ul id="f091b50b-74cb-4074-88a8-7d0649c39236" class="bulleted-list"><li style="list-style-type:disc">声明没初始化才是nil，len()和cap()为0时候并不一定是nil</li></ul><ul id="09c8a2a0-ddf2-43dd-9d33-473c66919555" class="bulleted-list"><li style="list-style-type:disc"><strong>注意</strong> 切片是一个<strong>引用</strong>类型，都指向了底层的一个数组</li></ul><pre id="1ea72d9a-1876-4da6-94d2-b2c1452d1035" class="code code-wrap"><code>// 基本和数组一样，但是中括号中没有任何东西
+var s []int // s默认值为nil
+
+//基本初始化和数组一样， 可以由数组来初始化
+s1 := [...]int{1,2,3,4}
+//不可超过原来的大小，类似python，可省略
+s2 := s1[1:3] //左闭右开</code></pre><p id="a9a16984-138d-4382-aea9-9ae8fbfdbab9" class="">切片长度用len()， 可扩充容量为cap()</p><pre id="559940db-7081-4cd6-b100-aa371e6cd1f8" class="code code-wrap"><code>fmt.Println(len(s2)) // 2 len为长度 取当前切片的长度
+fmt.Println(cap(s2)) // 3 cap为容量 取当前切片的第一个到切片源最后</code></pre><p id="d94f4a4f-a41c-47d7-875c-b03af248728d" class="">切片再切片</p><pre id="d5f107b5-d062-4e82-86fa-3dcd5a67157d" class="code code-wrap"><code>s3 := s2[2:] // 一个元素，3</code></pre><p id="97fb189e-0d6f-4742-8702-158d41aa8f55" class=""><strong>make函数构造切片</strong></p><pre id="aa1d3e46-fea7-43d2-b66e-7031daecf9fd" class="code code-wrap"><code>s1 := make([]int, 5, 10) // int类型，长度5，容量5的切片</code></pre><p id="34bfb067-ffbe-4939-a91f-29fed825521f" class=""><strong>切片的append() 与 copy()</strong></p><p id="245fe3c5-a83d-4176-9345-edff3451d2a9" class=""><code>s = append(s, 1)</code> 用于切片元素的添加，必须有接收变量</p><p id="cc6858d9-0000-4df4-b0c0-1addf93fafde" class=""><code>s = append(s, s1...)</code> 将s1切片拆开添加到s中</p><p id="89d08612-373e-4ce8-97ed-2e00f5265ba8" class="">切片的赋值<code>=</code>是引用赋值, 而copy是深拷贝 <code>copy(des, src)</code></p><p id="5f67a335-5e2c-4993-b252-d423f403a9f0" class=""><strong>没有删除函数, 需要自定义</strong></p><p id="25b6bf13-9fdf-42c0-90b6-51688b51ff65" class=""><code>a1 = append(a1[:1], a1[2:]...)</code> 删除第一个</p><p id="a3dddb25-c931-483c-9b3e-940bf71c9897" class=""><strong>sort函数对切片进行排序</strong></p><p id="8537a74a-5626-45db-bdca-1e029a1d3ace" class=""><strong>cap如果不够了会自动增倍.策略为:</strong></p><ul id="d4ee5b9f-37fc-4dad-8115-7bd08ff6b12f" class="bulleted-list"><li style="list-style-type:disc">切片item不同类型的处理方式不一样</li></ul><ul id="7edb726d-0f5a-49e6-ba9a-9f63470ad620" class="bulleted-list"><li style="list-style-type:disc">新申请容量大于原来 2*old.cap, 最终容量就是新申请的</li></ul><ul id="8b23a87a-b3e7-415b-8200-f59904040b0b" class="bulleted-list"><li style="list-style-type:disc">如果旧的小于1024则新的翻倍</li></ul><ul id="961b355b-f99f-49da-9203-9ff51349f1c7" class="bulleted-list"><li style="list-style-type:disc">如大于1024,则一直增加旧的1/4,直到大于需要的</li></ul><ul id="00c20a54-4a82-44d6-be06-dbd370cab6e3" class="bulleted-list"><li style="list-style-type:disc">如果最终容量计算溢出,则最终容量就是新申请的</li></ul><h3 id="b56664fe-bfbe-40a7-8930-5a638320d2eb" class="">指针</h3><p id="a676a61e-59ac-465c-b12e-78276779a716" class=""><code>&amp;</code> 取地址</p><ul id="63e5dee6-aaad-4f09-a070-e1c3756aa256" class="bulleted-list"><li style="list-style-type:disc"><code></code> 根据地址取值</li></ul><h3 id="7bfca77c-af42-46a1-8a0a-d2c609dfd54a" class="">new, make区别</h3><ol type="1" id="7f745b3e-54ac-41e2-9837-d01107d7ed32" class="numbered-list" start="1"><li>两者都是申请内存的</li></ol><ol type="1" id="e7e358c0-75b7-42a1-89d4-133d54b4cc2a" class="numbered-list" start="2"><li>new很少用,用于对基本数据<code>int, string</code>声明</li></ol><ol type="1" id="45fe60f9-b696-48db-8c24-023a3aa0e14d" class="numbered-list" start="3"><li>make只用于slice, map, channel的初始化</li></ol><h3 id="d2bb8f92-2d66-490f-9919-dbf5d9c2757a" class="">map</h3><pre id="4f81b6e0-354a-4d6d-947e-2a6463698fde" class="code code-wrap"><code>map[keyType]valueType</code></pre><p id="5365a652-e5e6-4b4a-984c-9f944ae331f3" class="">map需要初始化后才能使用 <code>mapname = make(map[keyType]valueType, len)</code> 。尽量再开始就估算好容量，避免在之后进行动态的扩容</p><p id="4d8e1c09-7f19-4ffb-a061-26e818390dfb" class="">返回值是value值与ok是否能查到值 <code>v, ok := mapNmae[key]</code>， 取不到会返回0值</p><p id="b88badee-8f20-4a84-adf4-0cc114fc0b1d" class=""><code>for k,v := range mapName</code> 遍历key值与value值</p><p id="3f3896d4-8afb-4fab-8b53-b2c555011bea" class="">删除不存在的key值时会直接跳过</p><h2 id="0b6ff6f7-5f7f-4dca-8b18-b9fc0e2af417" class="">函数</h2><pre id="8d10d9de-cadc-4e9b-b9ce-0a71fb4ce709" class="code code-wrap"><code>func funName(参数)(返回值) {
+}</code></pre><p id="966d6768-1110-4a7a-879c-a7d7d4382c5c" class="">如果返回值有值，则一定要写return，返回值代表在函数中提前声明了一个遍历，如果是命名了的返回值，则return后可以不写。</p><p id="81a2e2b8-32d1-4894-9cef-fa8972fdae42" class="">参数简写：如果多个参数的类型一致，可以把前面的进行省略</p><pre id="5ae66b4d-16a5-414b-be2b-e04b4141115c" class="code code-wrap"><code>func f(x,y,z int, a,b string) {
+}</code></pre><p id="8c011636-c20f-4442-853d-c057e9173c42" class="">可变长参数：<code>func f(a int, b ...string)</code> 可以传多个同类型的。<strong>b的类型是切片</strong>。必须放在最后</p><p id="c940d9cb-cd2e-4d0f-8623-4563d15cd2a8" class="">函数不可重载，意思是必须名字不一样</p><p id="5c72fc44-3555-4dba-b0e1-6039d8d9faf9" class="">函数中不嫩声明函数</p><h3 id="0a15d101-06b1-4f70-afa4-d41b3e23a4c7" class="">defer语句</h3><p id="e0927a1b-470a-40ac-88a5-d2598fe8f745" class="">把后面的跟着的函数延迟到函数即将返回的时候再执行</p><p id="9af5ad9d-7adb-4a0f-a276-2eb1216afb14" class="">比如说可以先用defer关闭一个文件、关闭数据库等操作。他会自动再推出函数的时候自动运行</p><p id="f1f76673-5c4c-4962-9b96-65d4498f6939" class="">执行的顺序是逆序的，也就是说多个defer之间，先声明的defer会后执行</p><h3 id="187ff637-8641-4c52-81a6-633f4a09e07d" class="">机制：</h3><p id="ece770c6-556c-419d-b498-e351200b8a9a" class="">return语句不是原子操作，他会先返回值赋值，再RET指令，<strong>而defer语句就发生在这里两个操作之间</strong>。</p><p id="e6df051d-bd72-4fe6-af23-f6932205325b" class=""><strong>这里需要提醒一点</strong>，在返回值是在函数名后声明的，那么返回值是这个变量，而如果在defer语句对这个变量操作，会影响到返回值！而如果没有声明名字，是匿名的返回值，或者是在函数内声明的变量进行返回，这样返回值是赋值在其他地方的，defer并不会影响到返回值。</p><pre id="701c294d-1f63-4b0a-a7f6-2e1ca273da9d" class="code code-wrap"><code>func f1() (x int) {
+    defer func(x int) {x++} // 会修改
+    return 1
+}
+
+func f2() int {
+    x := 1
+    defer func(x int) {x++} // 不会修改
+    return x
+}</code></pre><h3 id="01b316d4-54ac-4088-aa49-ddc831774466" class="">函数类型与变量</h3><p id="9167d6e7-9647-4981-adae-ca47a476d128" class="">函数作为参数传入,也可以作为返回值：</p><pre id="7de179df-0b0d-4514-941e-24d94ff21a46" class="code code-wrap"><code>func f(ft func()int) {
+}
+func f(x func()int) (func(int, int) int) {
+    return x
+}</code></pre><p id="e848e2fa-6a51-4d82-8267-f5c9c95bb75e" class=""><strong>有匿名函数</strong>，用法是直接省略函数名的声明，这样可以在函数内部声明一个函数。如果是直调用一次的函数，还可以简写成立即执行函数</p><h3 id="44b74e3a-532c-4f09-8134-14ffc0d72f5d" class="">闭包</h3><p id="f2babb5a-22ea-4e47-ac88-f34aa0e8c604" class="">一个函数包含了他外部作用域的其他变量的引用</p><pre id="c8d354d9-99e8-4cf5-8a05-4996109bfd7a" class="code code-wrap"><code>func adder(x int) func(int)int{
+    return func(y int) int {
+        x += y
+        return x
+    }
+}
+ret := adder(100)
+ret2 := ret(200) // 300
+ret3 := ret(3) // 303
+// 注意这里x是封装到了函数内部，这个函数就能带有一定的记忆性了</code></pre></div></article></body></html>

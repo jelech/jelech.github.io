@@ -1,0 +1,671 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>CDN缓存</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="393ecf47-d2ab-408f-a317-e534937c926f" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🌍</span></div><h1 class="page-title">CDN缓存</h1></header><div class="page-body"><blockquote id="e5f44168-910f-474b-ba81-b0707f083b06" class="">Content Delivery Network</blockquote><p id="077a8e39-6718-4e68-bdbf-96a500690ccb" class="">CDN缓存一般是由网站管理员自己部署，为了让他们的网站更容易扩展并获得更好的性能。通常情况下，浏览器先向CDN网关发起Web请求，网关服务器后面对应着一台或多台负载均衡源服务器，会根据它们的负载请求，动态将请求转发到合适的源服务器上。从浏览器角度来看，整个CDN就是一个源服务器，从这个层面来说，浏览器和服务器之间的缓存机制，在这种架构下同样适用。</p><h2 id="d7334297-a2f0-49e2-a529-69b5f2453655" class="">用户web访问流程</h2><ol type="1" id="1adb96c2-6c83-4fe8-aa8d-f97342082391" class="numbered-list" start="1"><li>用户向浏览器输入www.web.com这个域名，浏览器第一次发现本地没有dns缓存，则向网站的DNS服务器请求；</li></ol><ol type="1" id="08afbf05-02fa-41ce-b565-ce8edd2aa0be" class="numbered-list" start="2"><li>网站的DNS域名解析器设置了CNAME，指向了www.web.51cdn.com,请求指向了CDN网络中的智能DNS负载均衡系统；</li></ol><ol type="1" id="aa659c99-c96a-4d5e-afc8-6c5010ccd7d2" class="numbered-list" start="3"><li>智能DNS负载均衡系统解析域名，把对用户响应速度最快的IP节点返回给用户；</li></ol><ol type="1" id="dce77b8e-db59-4a34-81e1-443db3cab6e4" class="numbered-list" start="4"><li>用户向该IP节点（CDN服务器）发出请求；</li></ol><ol type="1" id="6b563c6f-e968-4b9c-a4d3-15bfef964e29" class="numbered-list" start="5"><li>由于是第一次访问，CDN服务器会向原web站点请求，并缓存内容；</li></ol><ol type="1" id="591b0ee0-5cd6-429a-915e-265a2f7992f8" class="numbered-list" start="6"><li>请求结果发给用户。</li></ol><h2 id="f3a2eae8-5f43-4a14-a67c-4ba514c29f47" class=""><strong>CDN的缓存机制</strong></h2><p id="dddeabf8-44cb-416a-9bb2-e1984761202b" class="">CDN边缘节点缓存策略因服务商不同而不同，但一般都会遵循http标准协议。</p><p id="48dce3b0-de0a-4959-a589-790ba93b9b28" class="">通过http响应头中的Cache-control: max-age的字段来设置CDN边缘节点数据缓存时间。</p><p id="17494c39-e132-473c-9537-c216a18bc7c0" class="">当客户端向CDN节点请求数据时，CDN节点会判断缓存数据是否过期，若缓存数据并没有过期，则直接将缓存数据返回给客户端；否则，CDN节点就会向源站发出回源请求，从源站拉取最新数据，更新本地缓存，并将最新数据返回给客户端。所以，如果我们修改了内容，最好加个版本号，让CDN重新获取资源，从而减少不必要的麻烦。</p><p id="a72bd243-0eae-4cff-a34d-32022608f0e6" class="">CDN服务商一般会提供基于文件后缀、目录多个维度来指定CDN缓存时间，为用户提供更精细化的缓存管理。CDN缓存时间会对“回源率”产生直接的影响。若CDN缓存时间较短，CDN边缘节点上的数据会经常失效，导致频繁回源，增加了源站的负载，同时也增大的访问延时；若CDN缓存时间太长，会带来数据更新时间慢的问题。开发者需要增对特定的业务，来做特定的数据缓存时间管理。</p><h2 id="5ecc25fc-3fb8-45ce-b954-1026d091f2a3" class=""><strong>CDN的问题</strong></h2><p id="65492a04-a676-4190-8c06-1dab8dcb9006" class="">CDN的分流作用不仅减少了用户的访问延时，也减少了源站的负载。但其缺点主要是缓存的同步问题：当网站更新时，如果CDN节点上数据没有及时更新，即便用户再浏览器使用Ctrl +F5的方式使浏览器端的缓存失效，也会因为CDN边缘节点没有同步最新数据而导致用户访问异常。</p><h2 id="d8fcb50a-cfc6-4f4c-9db0-5121c7201921" class=""><strong>如何解决CDN的问题</strong></h2><p id="a6a35f6a-1f68-46d8-87d1-faa2180a9e1d" class="">CDN的主要问题是由于缓存同步不及时带来的，缓存更新有两种方式：</p><ul id="499b662f-0eea-49bd-a562-7c99e025a904" class="bulleted-list"><li style="list-style-type:disc">定制缓存策略静态文件在返回时由源服务器控制expires、cache-control等属性来定义CDN的缓存策略。</li></ul><ul id="a063d30f-96ad-4b04-a3e6-55b99c4bac93" class="bulleted-list"><li style="list-style-type:disc">源服务器资源更新时，主动刷新CDN缓存CDN边缘节点对开发者是透明的，相比于浏览器Ctrl+F5的强制刷新来使浏览器本地缓存失效，开发者可以通过CDN服务商提供的“刷新缓存”接口来达到清理CDN边缘节点缓存的目的。这样开发者在更新数据后，可以使用“刷新缓存”功能来强制CDN节点上的数据缓存过期，保证客户端在访问时，拉取到最新的数据。</li></ul><h2 id="e9201b2a-a4d2-4603-93a0-6417617655ad" class="">cdn缓存相关设置</h2><ul id="f0a83fe1-e6a1-4aa5-82f8-6c8029c97127" class="bulleted-list"><li style="list-style-type:disc">http.Cache-Control: <ul id="5f818c10-12bb-4488-ba6b-eab9fe106da2" class="bulleted-list"><li style="list-style-type:circle">在 HTTP 1.1 中引入，用于为 Web 发布者提供对其内容的更多控制权，并解决 <code>Expires</code> 标头的局限性。</li></ul><ul id="aaf32cd1-a75c-45a7-8812-24c4d9ba73ed" class="bulleted-list"><li style="list-style-type:circle">如果同时定义了 <code>Expires</code> 和 <code>Cache-Control</code> 标头，则将替代前一个标头。</li></ul></li></ul><ul id="64ae7cb1-0e2c-4649-bc01-5bf52d6007c1" class="bulleted-list"><li style="list-style-type:disc"><strong>Expires：</strong><ul id="db63917f-fd37-48cc-9a18-64480f2b4624" class="bulleted-list"><li style="list-style-type:circle">HTTP 1.0 中引入的旧标头支持向后兼容性。</li></ul><ul id="caf3e82f-af9e-449e-9f28-43956ace398c" class="bulleted-list"><li style="list-style-type:circle">使用基于日期的过期时间，精确到秒。</li></ul><ul id="ca07a90b-f87a-4ab1-a09f-31af19e2e232" class="bulleted-list"><li style="list-style-type:circle">类似于 <code>Cache-Control: max-age</code>。</li></ul><ul id="f006faa6-296b-4a98-925e-bd510ffdc0f1" class="bulleted-list"><li style="list-style-type:circle">当 <code>Cache-Control</code> 不存在时使用。</li></ul></li></ul><ul id="1e6fc933-6778-45f2-8d6d-fc2a1a9814d0" class="bulleted-list"><li style="list-style-type:disc"><strong>Pragma：</strong><ul id="89f80ca6-3618-4b7e-a2cc-51769c66da37" class="bulleted-list"><li style="list-style-type:circle">Azure CDN 默认情况下未采用。</li></ul><ul id="e6db2fbd-a05c-4e7f-b831-38f95d7961e6" class="bulleted-list"><li style="list-style-type:circle">HTTP 1.0 中引入的旧标头支持向后兼容性。</li></ul><ul id="66f56e5f-0e70-44cf-a280-74b31f8452db" class="bulleted-list"><li style="list-style-type:circle">用作具有以下指令的客户端请求标头：<code>no-cache</code>。 此指令指示服务器提供新的资源版本。</li></ul><ul id="f68e151e-d482-4575-97d7-4b684f46befb" class="bulleted-list"><li style="list-style-type:circle"><code>Pragma: no-cache</code> 等效于 <code>Cache-Control: no-cache</code>。</li></ul><p id="de3e8bb9-4e6c-42bc-86cb-0e84a082a929" class="">
+</p></li></ul><h3 id="f772ea56-2df2-4c90-9618-9137077fc419" class="">验证</h3><p id="818167b3-c55e-4c37-8373-90ed6b6214b4" class="">当缓存过时时，使用 HTTP 缓存验证程序将文件的缓存版本与源服务器上的版本进行比较。</p><ul id="15072355-0b15-4942-b4af-1bb4c2e76249" class="bulleted-list"><li style="list-style-type:disc"><strong>ETag：</strong><ul id="b78396fd-0609-477a-989e-7e5bfe46e156" class="bulleted-list"><li style="list-style-type:circle"><code>ETag</code> 为每个文件和文件版本定义唯一字符串。 例如，<code>ETag: &quot;17f0ddd99ed5bbe4edffdd6496d7131f&quot;</code>。</li></ul><ul id="5616c203-f6af-447e-9652-9b48e3176c90" class="bulleted-list"><li style="list-style-type:circle">在 HTTP 1.1 中引入，并且比 <code>Last-Modified</code> 更新。 当很难确定上次修改日期时，会非常有用。</li></ul><ul id="ad3c2a44-bcda-4177-8d27-3796ce9616a4" class="bulleted-list"><li style="list-style-type:circle">支持强验证和弱验证，不过，Azure CDN 仅支持强验证。 对于强验证，两种资源表示形式的每个字节都必须相同。</li></ul><ul id="149d04fe-7acb-42d3-9049-6c11bd0f6a44" class="bulleted-list"><li style="list-style-type:circle">缓存通过在请求中发送带有一个或多个 <code>ETag</code> 验证程序的 <code>If-None-Match</code> 标头来验证使用 <code>ETag</code> 的文件。 例如，<code>If-None-Match: &quot;17f0ddd99ed5bbe4edffdd6496d7131f&quot;</code>。 如果服务器的版本与列表中的 <code>ETag</code> 验证程序相匹配，则在其响应中发送状态代码 304（未修改）。 如果版本不同，则服务器响应状态代码 200（确定）和更新后的资源。</li></ul></li></ul><ul id="d2845efb-f847-46dd-b794-3b86613fff68" class="bulleted-list"><li style="list-style-type:disc"><strong>Last-Modified：</strong><ul id="532c02a2-67ef-440c-8e2f-46b99554e494" class="bulleted-list"><li style="list-style-type:circle">如果 <code>ETag</code> 不是 HTTP 响应的一部分，则使用 <code>Last-Modified</code>。</li></ul><ul id="bd78ff77-28d7-464a-a551-4f644c7d3492" class="bulleted-list"><li style="list-style-type:circle">指定源服务器已确定上次修改资源的日期和时间。 例如，<code>Last-Modified: Thu, 19 Oct 2017 09:28:00 GMT</code>。</li></ul><ul id="13ad5b5f-35f0-478a-8c02-26cad14e700b" class="bulleted-list"><li style="list-style-type:circle">缓存通过在请求中发送带有日期和时间的 <code>If-Modified-Since</code> 标头来验证使用 <code>Last-Modified</code> 的文件。 源服务器将该日期与最新资源的 <code>Last-Modified</code> 标头进行比较。 如果自指定时间以来未修改该资源，则服务器在其响应中返回状态代码 304（未修改）。 如果已修改该资源，则服务器返回状态代码 200（确定）和更新后的资源。</li></ul></li></ul><p id="6acfd827-174b-4c0e-92ce-c1c0043a63fb" class="">
+</p></div></article></body></html>

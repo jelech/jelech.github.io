@@ -1,0 +1,676 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>GO高性能编程</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ffce820f-efe7-4c44-b47f-e048ff38c104" class="page mono"><header><img class="page-cover-image" src="https://geektutu.com/post/high-performance-go/high-performance-go.jpg" style="object-position:center 24.490000000000002%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">📖</span></div><h1 class="page-title">GO高性能编程</h1></header><div class="page-body"><p id="3ae37ec4-2bf0-4384-959e-40724a9014b5" class=""><a href="https://github.com/geektutu/high-performance-go">书籍源地址</a></p><h1 id="42e1d9ab-6886-4fe6-a45b-b79c92bb9ab6" class="">Benchmark</h1><h2 id="8c81d772-ad33-43b9-87fa-17e43fe71213" class="">编写</h2><p id="0f6d06a9-f391-49f8-877f-5b8058e92050" class="">Go中testing的另一种测试方式，可以测试函数的运行时间和内存占用.</p><pre id="fe00b1e1-16d4-492f-8ff9-9aed8377581d" class="code"><code>func BenchmarkABC(b *testing.B) {
+	for i := 0; i &lt; b.N; i++{
+		b.StopTimer()
+		b.StartTimer()
+		ABC(a,b,c)	
+	}
+}</code></pre><p id="9e1a6bb2-c86c-4536-81cc-827caf181b12" class="">b.N是benchmark多次调用的N上限变化逻辑大概是<code>1, 2, 3, 5, 10, 20, 30, 50, 100</code>。</p><p id="8e7f54b9-a297-4446-af5b-db7da94ca393" class="">b.StopTimer()和b.StartTimer()可以让计时器暂时停止，用处在于某些值的初始化是需要时间的。</p><h2 id="d33ee801-b8c8-469a-97fa-8cb28b7861a3" class="">命令行调用</h2><p id="d62662c3-7fae-480c-a059-162f87f01442" class=""><code>go test &lt;module name&gt;/&lt;package name&gt;</code> 用来运行某个 package 内的所有测试用例。</p><ul id="df01330a-c7c6-4b25-b72d-49106d793610" class="bulleted-list"><li style="list-style-type:disc">运行当前 package 内的用例：<code>go test example</code> 或 <code>go test .</code></li></ul><ul id="b16ccc67-778d-410f-bd91-d46549692952" class="bulleted-list"><li style="list-style-type:disc">运行子 package 内的用例： <code>go test example/&lt;package name&gt;</code> 或 <code>go test ./&lt;package name&gt;</code></li></ul><ul id="6bd8fda0-6845-4aa2-95fd-b4d39d45c085" class="bulleted-list"><li style="list-style-type:disc">如果想递归测试当前目录下的所有的 package：<code>go test ./...</code> 或 <code>go test example/...</code></li></ul><ul id="5bc524c4-f471-4185-a2de-d3449082c517" class="bulleted-list"><li style="list-style-type:disc"><code>go test</code> 命令默认不运行 benchmark 用例的，如果我们想运行 benchmark 用例，则需要加上 <code>-bench</code> 参数。<code>bench</code> 参数支持传入一个正则表达式，匹配到的用例才会得到执行。</li></ul><ul id="9989a2c0-4307-4be2-988d-53076efcd7fe" class="bulleted-list"><li style="list-style-type:disc">使用 <code>-benchtime</code> 和 <code>-count</code> 两个参数提升准确度，<code>-benchtime=5s</code> 指定测试时间。</li></ul><ul id="8862ae35-8426-43db-a2fa-6eae1157f5af" class="bulleted-list"><li style="list-style-type:disc"><code>-benchmem</code> 参数可以度量内存分配的次数，显示在allocs/op字段</li></ul><h1 id="be6cbe31-abe7-4469-821f-3f6faf292482" class="">自带数据结构优化</h1><h2 id="84ac46d2-4f26-4abd-9eef-e35da812a9f2" class="">字符串拼接性能</h2><p id="aaf77352-8a0f-4509-8d2a-a66dba57bf0f" class="">先下结论：<code>preByteConcat</code> &gt; <code>strings.Builder</code> &gt; <code>bytes.Buffer</code> &gt;&gt; <code>fmt.Sprintf</code> &gt; <code>+</code></p><ul id="b5810081-077e-4200-8eb8-a858a44828be" class="bulleted-list"><li style="list-style-type:disc">其中preByteConcat的数据需要提前预分配空间</li></ul><ul id="a105a893-a9fe-428f-9818-771314063a70" class="bulleted-list"><li style="list-style-type:disc">大部分时候strings.Builder是比较优良的选择，否则string转byte也会需要花时间</li></ul><ul id="10fe7743-677c-4aa4-9c50-656bc7009391" class="bulleted-list"><li style="list-style-type:disc"><code>strings.Buidler.Grow(len)</code> 可以对空间进行预分配</li></ul><p id="2d1d5bc2-6c33-4bc0-a2bc-b40886d04d83" class="">性能差距原因</p><p id="d6d5ed96-9e5b-4e57-8675-cbe24aea3f60" class="">其中<code>strings.Builder</code>和<code>+</code> 差距明显的原因是底层的数据分配方式不一样，字符串在 Go 语言中是不可变类型，占用内存大小是固定的，当使用 + 拼接 2 个字符串时，生成一个新的字符串，那么就需要开辟一段新的空间</p><h2 id="771d8d72-61e9-4808-b57a-5f047451b6a4" class="">slice的性能及陷阱</h2><p id="e5003105-f6ea-4105-8d7e-351ee126032e" class="">结论：slice是底层数组的部分切片，而每次切片的复制是引用关系，外部的引用会导致底层更大的数组无法被释放，进而导致内存无法释放</p><h2 id="2ea8af09-5ead-491a-adf3-0a3564498b2c" class="">for与range性能比较</h2><p id="a8a02748-6d18-4b43-867b-af432e969a6c" class="">结论： range返回的item是个拷贝版本，如果list中的item是个很大的item，那么在拷贝时会额外花费更多的时间(当然可以用指针，这样就解决了这里的问题)。因此日常使用的时候要么尽量使用指针，要么尽量使用fori进行遍历</p><h2 id="f9a5c6de-4822-4175-b958-94f319a43e3e" class="">reflect反射</h2><p id="ed2cf301-e05e-4ddd-bd9e-dc462234ac0b" class="">结论：尽量避免使用，反射<code>赋值</code> 性能很低。FieldByName方法也很慢，尽量避免使用</p><h2 id="aaa8b28c-a186-4876-a865-6d6789422695" class="">空结构节省内存</h2><p id="a197d3e2-0130-4239-acaa-5c0eafff1688" class="">结论：在channel的传输里，map的另一项定义里（比如用map做set）可以使用<code>struct{}</code> 该字段的长度为0</p><h2 id="e885ca79-4270-4e1f-a592-dda0693f076c" class="">字段对齐以节省内存</h2><p id="acc87016-f1e0-414e-a912-b2c2e210b715" class="">结论：让字段定义以字节能对齐的方式进行排列，可以减少内存和cpu查询所花费的时间，也能一减少部分的内存占用。当 <code>struct{}</code> 作为其他 struct 最后一个字段时，需要填充额外的内存保证安全。</p><h1 id="846cd0dc-c118-4952-b323-8f096b01578c" class="">并发编程</h1><h2 id="11f0dc81-ba83-4ef6-8da3-6ef12c8f8385" class="">读写锁与互斥锁的效率</h2><p id="e775828f-151c-4b73-8efb-1f1d9d012f69" class="">每次读写操作在1微秒的情况下：</p><ul id="45a892fb-5c6c-49bd-85a7-4616f9110b65" class="bulleted-list"><li style="list-style-type:disc">读多写少(读占 90%)<p id="55238a25-501a-407e-a3bf-414ada86b88b" class="">读写比为 9:1 时，读写锁的性能约为互斥锁的 8 倍</p></li></ul><ul id="3523ea4f-d968-4338-8a02-ed9da5d09ead" class="bulleted-list"><li style="list-style-type:disc">读少写多(读占 10%)<p id="cd949018-f885-493f-a604-83ec985d4c43" class="">读写比为 1:9 时，读写锁性能相当</p></li></ul><ul id="6ac6003b-5c0a-4044-b078-a83a44da2914" class="bulleted-list"><li style="list-style-type:disc">读写一致(各占 50%)<p id="a6f204cc-e0e6-43da-94de-fa349899f121" class="">读写比为 5:5 时，读写锁的性能约为互斥锁的 2 倍</p></li></ul><h2 id="b4713f4e-97b6-4a29-bc22-8555bea6947c" class="">协程超时退出</h2><ul id="12676927-111e-4fad-b11c-513ca133f2cd" class="bulleted-list"><li style="list-style-type:disc">尽量使用非阻塞 I/O（非阻塞 I/O 常用来实现高性能的网络库），阻塞 I/O 很可能导致 goroutine 在某个调用一直等待，而无法正确结束。</li></ul><ul id="112d4dcf-715f-4e6f-96dd-ef43645b5dec" class="bulleted-list"><li style="list-style-type:disc">业务逻辑总是考虑退出机制，避免死循环。</li></ul><ul id="59fcca3c-5a74-4f02-bd3f-59b7096963fc" class="bulleted-list"><li style="list-style-type:disc">任务分段执行，超时后即时退出，避免 goroutine 无用的执行过多，浪费资源。</li></ul><h2 id="ae561be9-aaae-43be-bf4a-719e5cf0a01c" class="">sync.Once提升性能</h2><p id="9f5c0d9a-530c-4802-a166-39c7bb3d1ce1" class=""><code>sync.Once</code> 是 Go 标准库提供的使函数只执行一次的实现，常应用于单例模式，例如初始化配置、保持数据库连接等。</p><h2 id="d2bb8227-fc38-4cdd-9e84-8d95a64ecf67" class="">sync.Cond来通知多个等待</h2><p id="8460889c-301c-4086-87ec-79e7ec04882b" class="">一句话总结：<code>sync.Cond</code> 条件变量用来协调想要访问共享资源的那些 goroutine，当共享资源的状态发生变化的时候，它可以用来通知被互斥锁阻塞的 goroutine。</p><p id="8635ec96-3114-47d8-b924-4aa8c029f5c6" class="">
+</p></div></article></body></html>

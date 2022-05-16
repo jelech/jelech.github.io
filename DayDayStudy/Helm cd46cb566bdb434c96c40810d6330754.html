@@ -1,0 +1,913 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Helm</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="cd46cb56-6bdb-434c-96c4-0810d6330754" class="page mono"><header><div class="page-header-icon undefined"><span class="icon">🚅</span></div><h1 class="page-title">Helm</h1></header><div class="page-body"><h2 id="ca66a753-e2c3-47df-a671-ad1b9b03b27e" class="">官方文档链接：<a href="https://helm.sh/docs/">Doc</a></h2><h2 id="5a9794cf-21bf-4fd9-b5c9-b60e52e01b6a" class="">简介</h2><blockquote id="0304dc3c-4694-43f3-b833-236061af0095" class=""><strong><mark class="highlight-teal">增强的Go-template方法用于编译k8s部署yaml</mark></strong><p id="2319a1f6-5f18-4a75-bfac-3678120b7db6" class="">Helm 是 Kubernetes 的包管理器，Helm的包涵盖了将Kubernetes资源安装到Kubernetes集群所需要的足够多的信息。而其中的charts包含<code>Chart.yaml</code>文件和模板，默认值(<code>values.yaml</code>)，以及相关依赖。</p><p id="e112bcdf-2047-4551-97cc-23f51e12e9d5" class="">helm chart 可以方便编写和部署k8s的应用，方便编写和组织yaml文件。它使用GO的模板引擎为基础，增加了部分的字段，用于Go模板流水线。</p></blockquote><ul id="ae13ca9a-ca6f-4b2b-b6d3-13ec1d8cc704" class="bulleted-list"><li style="list-style-type:disc">增加include方法</li></ul><ul id="7ee8ed7b-7d10-4aa3-8e9b-cb2deb8b380d" class="bulleted-list"><li style="list-style-type:disc">增加required方法</li></ul><ul id="26f038dc-bc58-42fd-aac4-f71693ddf9af" class="bulleted-list"><li style="list-style-type:disc">增加tpl方法</li></ul><p id="047f35c5-5122-4949-a24f-b6b39f0e87c9" class="">
+</p><p id="b061284d-2874-4cf7-b6f5-6bdd1508663c" class="">注意所有的Helm内置变量以大写字母开头，以便与用户定义的value进行区分：<code>.Release.Name</code>，<code>.Capabilities.KubeVersion</code></p><h2 id="bf98fa9b-997e-4216-aa21-19094043ca3c" class="">Demo</h2><ul id="ba65f0bb-27b7-4b68-9884-c02699209b57" class="bulleted-list"><li style="list-style-type:disc">helm create app</li></ul><ul id="2fb0b5c4-e0fa-4176-9174-4cc3a15ddba8" class="bulleted-list"><li style="list-style-type:disc">helm install full-coral-name ./app -n namespace<ul id="5b62e904-60ab-49a2-9cf0-22e256e96fd9" class="bulleted-list"><li style="list-style-type:circle">-n 表示指定的k8s的该namespace下进行操作</li></ul></li></ul><ul id="88a6d205-0d0e-4075-9591-c3d0e845947f" class="bulleted-list"><li style="list-style-type:disc">helm get manifest full-coral<ul id="0fc45cff-be0a-4978-a1ab-89a7d1e48d83" class="bulleted-list"><li style="list-style-type:circle">获取发布的full-coral-name</li></ul></li></ul><ul id="0225efd7-fd00-4676-b82d-d2df8cb8cf95" class="bulleted-list"><li style="list-style-type:disc">helm uninstall full-coral<ul id="7c219a19-663d-4f97-b5c0-f5819f7f14fa" class="bulleted-list"><li style="list-style-type:circle">卸载发布的程序，改操作同时也会移除线上链接的对应服务</li></ul></li></ul><ul id="002d20bb-e40f-4421-875b-90e1e99f3c63" class="bulleted-list"><li style="list-style-type:disc">helm install --debug --dry-run goodly-guppy ./mychart<ul id="3a1da532-2d8c-46ca-b841-9f79c439f0be" class="bulleted-list"><li style="list-style-type:circle">不会进行安装到k8s集群，只会渲染最终结果到控制台用于测试</li></ul><ul id="78d047b2-b38d-46f4-a2bf-9a6faca9aa90" class="bulleted-list"><li style="list-style-type:circle"><code>--disable-openapi-validation</code>用于查看渲染结果</li></ul></li></ul><ul id="e44af449-2f36-48ed-ad67-4aa7f7692ccf" class="bulleted-list"><li style="list-style-type:disc">value 覆盖： values.yaml &lt; 父values.yaml &lt; 外部-f提供的value文件 &lt; -set的值</li></ul><ul id="1853eeba-eb28-4f47-b872-c0df20a6f520" class="bulleted-list"><li style="list-style-type:disc">value中设置key=null可以删除该value，注意替代顺序</li></ul><ul id="9d34244a-72f7-4078-a78a-0c2e9fff44ce" class="bulleted-list"><li style="list-style-type:disc"><code>{{ .Values.favorite.drink | upper | quote }}</code><ul id="23c11f56-ce49-48dc-bc1b-b53f0970c250" class="bulleted-list"><li style="list-style-type:circle">管道 <code>|</code> 可以链接数据进行多个函数调用 </li></ul><ul id="bbe60ebc-2d5f-453c-b7ab-21c4d257ebe8" class="bulleted-list"><li style="list-style-type:circle">已知：<code>upper</code> <code>repeat n</code> <code>quote</code></li></ul><ul id="1043e011-02ea-4831-a77b-413332be18bf" class="bulleted-list"><li style="list-style-type:circle"><strong><mark class="highlight-blue"><a href="https://helm.sh/zh/docs/chart_template_guide/function_list/">helmChart函数列表</a></mark></strong></li></ul></li></ul><ul id="4a82be16-1a37-4e34-9876-5a0ce78bda61" class="bulleted-list"><li style="list-style-type:disc"><code>default &quot;value&quot;</code>设置默认值</li></ul><ul id="d508aeb5-cd3e-4fbd-8a7d-6fc21db13a0a" class="bulleted-list"><li style="list-style-type:disc"><code>lookup &quot;v1&quot; &quot;Pod&quot; &quot;mynamespace&quot; &quot;mypod&quot;</code> = <code>kubectl get pod mypod -n mynamespace</code><ul id="5046865b-9b8c-41d7-afec-5c7cd002dabc" class="bulleted-list"><li style="list-style-type:circle">使用<code>loopup</code>函数进行获取k8s的相关功能</li></ul><ul id="194555a4-d906-4ea1-b030-bbbf3d3e5579" class="bulleted-list"><li style="list-style-type:circle"><code>(lookup &quot;v1&quot; &quot;Namespace&quot; &quot;&quot; &quot;mynamespace&quot;).metadata.annotations</code>使用k8s namespace的特定属性值</li></ul></li></ul><ul id="35240e06-18b9-467b-9dcd-52ab9e9a5372" class="bulleted-list"><li style="list-style-type:disc"><code>|-</code>通配符用于表明多行字符串</li></ul><ul id="a6daa29d-e5a0-486a-81f0-ea6c0f52ace2" class="bulleted-list"><li style="list-style-type:disc"><code><strong>app.kubernetes.io/instance</strong></code><code>: &quot;{{ $.Release.Name }}&quot;</code><ul id="5f3cb6ca-02c7-44c3-8416-42177c918bb0" class="bulleted-list"><li style="list-style-type:circle"><code>$</code>符号在单独使用的时候可以指代全局作用域</li></ul></li></ul><ul id="e8d9b0cd-9a70-4bbe-bd4d-4d05750c41a4" class="bulleted-list"><li style="list-style-type:disc"><code>define</code>操作允许我们在模板文件中创建一个命名模板<ul id="d699c690-ff56-4f10-9b10-7ffd6186866a" class="bulleted-list"><li style="list-style-type:circle"><code>{{- template &quot;mychart.labels&quot; }} </code>进行使用模板</li></ul><ul id="b15b540c-d681-4660-84ed-aecead1771fd" class="bulleted-list"><li style="list-style-type:circle"><code>{{- template &quot;mychart.labels&quot; . }}</code>传入范围用于内部调用</li></ul><ul id="3690e249-2275-4a11-8e05-a60129cd1070" class="bulleted-list"><li style="list-style-type:circle"><code>{{ include &quot;mychart.app&quot; . | indent 4 }}</code>Helm模板中使用<code>include</code>而不是<code>template</code>被认为是更好的方式 只是为了更好地处理YAML文档的输出格式<pre id="599da577-19a8-4413-950b-1adb0d3091fd" class="code code-wrap"><code>{{ define &quot;MY.NAME&quot; }}
+# body of template here
+{{ end }}</code></pre></li></ul><h1 id="76877697-f8b6-4e00-a01b-768604e75263" class="">helmfile</h1><blockquote id="6f29c84d-d505-47d5-9dca-dde067041a4a" class="">Helmfile 是用于部署 Helm 图表分布的声明性规范包装。它们允许您将多个图表组合在一起以创建一个全面的部署工件，从而为 Helm 添加了额外的功能。<p id="9c302cd7-bfb5-4287-80f6-1da92572f51d" class="">组织多个helmchart。IAC形式描述多个服务的架构。真正实现一次性可选的部署多个chart工具。同等的工具类似于gitops。</p></blockquote><p id="6c0149db-8b65-42b7-bbf2-4e3f5eb3eadb" class="">使用官方的repo配置</p><pre id="f4bdb585-ec2e-442c-a264-adcdfc4f42d0" class="code code-wrap"><code># repo配置，指定helmchart服务的位置
+repositories:
+# 使用官方的一些Chart，比如: stable, incubator, polaris
+- name: stable
+  url: ...</code></pre><p id="ebe16b3e-8016-4dd4-b93a-b5351c04542b" class="">使用自己配置的repo</p><pre id="732a18b3-eda5-4aac-a312-7c44b1e7366f" class="code code-wrap"><code>repositories:
+# 高级配置：您可以设置基本或 tls 身份验证，并可选择启用 helm OCI 集成
+- name: roboll
+  url: http://roboll.io/charts   # 填写repo的地址，可以填写本地地址
+  certFile: optional_client_cert # 证书文件
+  keyFile: optional_client_key   # key文件
+  username: optional_username    # 用户名
+  password: optional_password    # 密码
+  oci: true
+  passCredentials: true
+	skipTLSVerify: true     # 跳过对 https repo 的 TLS 验证
+	caFile: optional_ca_crt # 带有自签名证书的 https repo</code></pre><p id="b2eecf3e-c2fb-4ad5-85db-f5bd72d74359" class="">自定义helm处理文件</p><pre id="03cab376-5506-4e8f-9eb1-e873f9226555" class="code code-wrap"><code>helmBinary : path/to/helm3</code></pre><p id="e7ee55ec-fd84-4ce0-bf78-26f9042418bb" class="">设置运行时传入的args的默认值。以下为helm的一些默认设置，这些配置与 <code>helm SUBCOMMAND</code> 相同</p><pre id="22520ad8-a800-46ac-8c30-eed7e795e78b" class="code code-wrap"><code>helmDefaults:
+  tillerNamespace: tiller-namespace  # tiller-namespace的专用默认密钥 （tiller处于k8s服务器中）
+  tillerless: false                  # tillerless的专用默认密钥
+  kubeContext: kube-context          # kube-context的专用默认密钥 (--kube-context)
+  cleanupOnFail: false               # helm flag的专用默认密钥 --cleanup-on-fail
+  # 传递给 helm 的附加和全局 args (default &quot;&quot;)
+  args:
+    - &quot;--set k=v&quot;
+
+  # 在upgrade前验证chart（仅适用于打包图表而不是目录）（默认为 false）
+  verify: true
+
+  # 通过 --wait 等待 k8s 资源。(默认 false)
+  wait: true
+
+  # 如果设置并启用--wait，将等到所有作业完成后才会将发布标记为成功。它将等待--timeout (默认为 false，在 Helm3.5 中实现)
+  waitForJobs: true
+
+  # 以秒为单位等待任何单个 k8s 操作的时间（如钩子的作业，并等待 pod/pvc/svc/deployment就绪）（默认 300）
+  timeout: 600
+
+  # 如果可以的话，对资源执行 pods 重启（默认 false）
+  recreatePods: true
+
+  # 如果需要，通过删除/重新创建强制资源更新（默认 false）
+  force: false
+
+  # 为对 Tiller 的请求启用 TLS（默认 false）
+  tls: true
+
+  # TLS-CA 证书文件路径 (默认 &quot;$HELM_HOME/ca.pem&quot;)
+  tlsCACert: &quot;path/to/ca.pem&quot;
+
+  # TLS-Cert 文件的路径 (默认 &quot;$HELM_HOME/cert.pem&quot;)
+  tlsCert: &quot;path/to/cert.pem&quot;
+
+  # TLS-key 文件的路径 (默认 &quot;$HELM_HOME/key.pem&quot;)
+  tlsKey: &quot;path/to/key.pem&quot;
+
+  # 每个版本保存的最大修订数。使用 0 表示无限制。(默认 10)
+  historyMax: 10
+
+  # 使用 helm 3.2+ 时，如果不存在则自动创建发布命名空间（默认为 true）
+  createNamespace: true
+
+	# 如果与charts一起使用，则museum允许提取不稳定charts进行部署，例如：如果 1.2.3 和 1.2.4-dev 版本存在并设置为 true，1.2.4-dev 将被拉取（默认为 false）
+  devel: true
+
+  # When set to `true`, skips running `helm dep up` and `helm dep build` on this release&#x27;s chart.
+  # Useful when the chart is broken, like seen in https://github.com/roboll/helmfile/issues/1547
+	# 当设置为 `true` 时，跳过在这个版本的chart运行 `helm dep up` 和 `helm dep build`。
+  # 当图表损坏时很有用，如 https://github.com/roboll/helmfile/issues/1547
+  skipDeps: false</code></pre><p id="93812e15-a5f2-4f98-a0db-7a2b3d83b640" class="">公用标签设定</p><pre id="47245cc5-1526-4340-bcdb-f8f02f1f70cc" class="code code-wrap"><code># 这些标签将应用于 Helmfile 中的所有版本。如果您有每个环境或客户的 helmfile 并且不想将相同的标签复制到每个版本，则在模板中很有用
+commonLabels:
+  hello: world</code></pre><p id="7996a9c8-16d9-4852-96b1-923ead09e999" class="">releases设定: 基础release设定</p><pre id="821247ad-c78a-417c-b36a-fa60ef1f58d6" class="code code-wrap"><code>releases:
+  - name: vault                        # 版本名称
+    namespace: vault                   # 目标namespace
+    createNamespace: true              # helm 3.2+ 自动创建发布namespace（默认为 true）
+    labels:                            # 用于过滤发布的label
+      foo: bar
+    chart: roboll/vault-secret-manager # 对应的chart referenced by `repository/chart` syntax
+    version: ~1.24.1                   # 版本范围约束。支持范围设定
+    condition: vault.enabled           # 用于过滤发布的值查找键。对应于 `vault.enabled` 的布尔值，其中 `vault` 是任意值
+    missingFileHandler: Warn           # 设置为“错误”或“警告”。 “错误”指示 helmfile 在无法找到值或机密文件时失败。当“警告”时，它会打印文件并继续。 # 用于渲染图表的值文件
+
+    # Values files used for rendering the chart
+    values:
+      # 通过 --values 传递的值文件，用于覆盖默认的value文件
+      - vault.yaml
+
+      # 内联值，通过临时值文件和--values 传递，因此它不会受到--set 等类型问题的影响
+      - address: https://vault.example.com
+
+      # Go 模板可在内联值和值文件中使用。
+      - image:
+          # 最终结果也很可能是yaml。 `quote` 也是如此，以防止类似数字的字符串被意外解析为数字！ 见 https://github.com/roboll/helmfile/issues/608
+          tag: {{ requiredEnv &quot;IMAGE_TAG&quot; | quote }}
+          # 否则:
+          #   tag: &quot;{{ requiredEnv &quot;IMAGE_TAG&quot; }}&quot;
+          #   tag: !!string {{ requiredEnv &quot;IMAGE_TAG&quot; }}
+        db:
+          username: {{ requiredEnv &quot;DB_USERNAME&quot; }}
+          password: {{ requiredEnv &quot;DB_PASSWORD&quot; }}
+        proxy:
+          domain: {{ requiredEnv &quot;PLATFORM_ID&quot; }}.my-domain.com
+          scheme: {{ env &quot;SCHEME&quot; | default &quot;https&quot; }}</code></pre><p id="191f5e16-489c-4377-8fbb-d1c333f1edff" class="">release设定：set字段值</p><pre id="d5fb7f52-a991-4e8c-a4c2-1989450d3747" class="code code-wrap"><code>releases:
+    # 请尽量使用values
+    # `set` 转换为 helm 的 `--set key=val`，已知它会遇到类型问题，例如 https://github.com/roboll/helmfile/issues/608
+    set:
+    - name: foo.config    # 从本地文件加载的单个值, 转换为 --set-file foo.config=path/to/file
+      file: path/to/file
+    - name: bar[0]        # 在数组中设置单个数组值，转换为 --set bar[0]={1,2}
+      values:
+      - 1
+      - 2
+    - name: namespace     # 设置模板值
+      value: {{ .Namespace }</code></pre><p id="6ef12f43-7051-41ee-8c8e-5be50a1aa83e" class="">release设定：其他字段值设置</p><pre id="da52eb1c-f64d-4bd9-8ade-096bdf4cc1db" class="code code-wrap"><code>releases:
+    # 将尝试使用解密它helm-secrets 插件
+    secrets:
+      - vault_secret.yaml
+    # 覆盖helm的默认值 for verify, wait, waitForJobs, timeout, recreatePods and force.
+    verify: true
+    wait: true
+    waitForJobs: true
+    timeout: 60
+    recreatePods: true
+    force: false
+
+    # 是否同步卸载此版本. (default true)
+    installed: true
+
+    # 是否在发布失败的情况下恢复以前的状态 (default false)
+    atomic: true
+
+    # 是否清理失败发布期间创建的任何新资源 (default false)
+    cleanupOnFail: false
+
+    # tiller namespace 的名称 (default &quot;&quot;)
+    tillerNamespace: vault
+
+    # 是否使用 helm-tiller 插件 (default false)
+    tillerless: false
+
+    # 为 Tiller 的请求启用 TLS (default false)
+    tls: true
+
+    # TLS CA 证书文件的路径 (default &quot;$HELM_HOME/ca.pem&quot;)
+    tlsCACert: &quot;path/to/ca.pem&quot;
+
+    # TLS 证书的路径文件 (default &quot;$HELM_HOME/cert.pem&quot;)
+    tlsCert: &quot;path/to/cert.pem&quot;
+
+    # TLS 密钥文件的路径 (default &quot;$HELM_HOME/key.pem&quot;)
+    tlsKey: &quot;path/to/key.pem&quot;
+
+    # --kube-context 要传递给 helm 命令。注意：这对于 `tilerless: true` 不起作用。
+    # See https://github.com/roboll/helmfile/issues/642 (默认 &quot;&quot;，表示标准 kubeconfig，可以是 ~/kubeconfig 或者 $KUBECONFIG 环境变量指向的文件)
+    kubeContext: kube-context
+
+    # 通过--disable-validation to helm 3 diff plugin, 这需要 diff plugin &gt;= 3.1.2
+    # 使用 helm api v1 CRDS 部署图表可能会有所帮助：https://github.com/roboll/helmfile/pull/1373
+    disableValidation: false
+
+    # 通过--disable-validation to helm 3 diff plugin, 这需要 diff plugin &gt;= 3.1.2
+    # 当任何版本包含尚未安装到集群上的 CRD 的自定义资源时，它很有用。https://github.com/roboll/helmfile/pull/1618
+    disableValidationOnInstall: false
+
+    # 通过--disable-validation to helm 3 diff plugin, 这需要 diff plugin &gt;= 3.1.2
+    # 可能有助于部署带有 helm api v1 CRDS 的图表。 https://github.com/roboll/helmfile/pull/1373
+    disableOpenAPIValidation: false
+
+    # 限制每个版本保存的最大修订数。使用 0 表示无限制 (default 10)
+    historyMax: 10
+
+    # 当设置为 `true` 时，跳过在此版本图表上运行 `helm dep up` 和 `helm dep build`。比如charts损坏时： https://github.com/roboll/helmfile/issues/1547
+    skipDeps: false
+
+</code></pre><p id="87e8433c-88f2-4c4d-a9dc-d996bca95adb" class="">release Example:</p><pre id="99bf1274-05c1-4c1b-b001-3019c69bcbe3" class="code code-wrap"><code>releases:
+  - name: grafana                            # 版本名
+    namespace: another                       # 目标namespace
+    chart: ../my-charts/grafana              # 为创建此版本而安装的chart，helmfile的相对路径引用
+    values:
+    - &quot;../../my-values/grafana/values.yaml&quot;                 # 值文件 (相对路径)
+    - ./values/{{ requiredEnv &quot;PLATFORM_ENV&quot; }}/config.yaml # 值文件取自带有环境变量的路径.
+    wait: true</code></pre><p id="af36699b-5653-45af-96eb-505442ad1421" class="">
+</p><p id="c017954d-0a8c-4bfb-8916-895ae7aaa93f" class="">高级配置：嵌套状态</p><pre id="4c4397ea-339b-4f2f-9da0-286bd6c35cad" class="code code-wrap"><code>helmfiles:
+- # 在发布releases前的helmfile文件路径
+  path: path/to/subhelmfile.yaml
+  
+	# 标签选择器用于过滤嵌套状态的发布
+  # 比如这个上下文中的`name=prometheus`等价于处理嵌套状态如 # helmfile -f path/to/subhelmfile.yaml -l name=prometheus sync
+  selectors:
+  - name=prometheus
+
+  # 覆盖状态值
+  values:
+  - additional.values.yaml # 值文件合并到嵌套状态的值中
+  # 这里使用值的一个重要方面是它们首先需要在原始 helmfile 的 values 部分中定义，因此在此示例中 key1 需要位于 path/to/subhelmfile.yaml 的 values 或 environment.NAME.values 中内联状态值合并到嵌套状态的值中
+  - key1: val1
+
+- # `helmfiles:` 下的所有嵌套状态文件按定义顺序处理。所以它可以用来准备你的主要`releases`。一个例子是在父状态文件中创建 `releases` 所需的 CRD。
+  path: path/to/mycrd.helmfile.yaml
+
+- # Terraform-module-like URL 用于导入远程目录并将其中的文件用作嵌套状态文件，嵌套状态文件与包含它的远程目录一起在本地签出。因此文件中的所有本地路径都是相对于文件
+  path: git::https://github.com/cloudposse/helmfiles.git@releases/kiam.yaml?ref=0.40.0
+
+# 如果设定为Error, 并且当subhelmfile指向不存在的路径时，则返回错误。默认行为是打印警告并继续。
+missingFileHandler: Error</code></pre><p id="f96cc16f-bd3a-4e4c-8b0f-4c554edb8ef1" class="">environment配置：<code>helmfile 管理的环境列表。</code></p><pre id="440598f1-ac8c-43c0-b8a0-482cbdc53280" class="code code-wrap"><code>environments:
+	# 使用的默认值，如果设定了 `--environment NAME` 则不会使用。
+  default:
+    values:
+    # values 中的每个条目都可以是文件路径或内联值。下面是一个内联值的例子，它被合并到 `.Values`
+    - environments/default/values.yaml
+    - myChartVer: 1.0.0-dev
+
+  # Example, 设定名称为production
+  production:
+    values:
+    - environments/production/values.yaml
+    - myChartVer: 1.0.0
+    
+# 禁用保险库发布处理
+    - vault:
+        enabled: false
+    
+    # `secrets.yaml` 由 `helm-secrets` 解密，并可通过 `{{ .Environment.Values.KEY }}` 获得
+    secrets:
+    - environments/production/secrets.yaml
+
+    # 当无法获取到对应文件时候的处理方案：&quot;Error&quot;, &quot;Warn&quot;, &quot;Info&quot;, &quot;Debug&quot;. The default is &quot;Error&quot;.
+    missingFileHandler: Error
+
+    # 用于此环境的 kubeContext
+    kubeContext: kube-context</code></pre><p id="f4155340-8a27-4d1d-b00a-078009ba1f08" class="">其他高级配置</p><pre id="3d6a17ca-e5fc-42ea-8283-a61536638f1d" class="code code-wrap"><code># 分层，可以由多个文件组成
+bases:
+- environments.yaml
+- defaults.yaml
+- templates.yaml
+
+# API 功能
+# 配置 API 版本的固定列表以通过 --api-versions 标志传递给“helm template”。
+apiVersions:
+- example/v1
+
+# DEPRECATED: 这仅在 Helm 2 上可用
+# 配置 Kubernetes 版本以通过 --kube-version 标志传递给“helm template”。
+kubeVersion: v1.21</code></pre></li></ul></div></article></body></html>

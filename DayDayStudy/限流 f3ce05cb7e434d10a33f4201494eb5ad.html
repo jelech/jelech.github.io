@@ -1,0 +1,671 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>限流</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f3ce05cb-7e43-4d10-a33f-4201494eb5ad" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/nasa_transonic_tunnel.jpg" style="object-position:center 60%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🧪</span></div><h1 class="page-title">限流</h1></header><div class="page-body"><div id="0a3d3283-e576-42e1-b6ec-7a3083e75edc" class="column-list"><div id="7d21de3f-e280-4f59-9ccd-9ab9f9d4371d" style="width:18.75%" class="column"><nav id="b8634437-16dc-40e6-989c-d9dbcac0d792" class="block-color-blue table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e11fed9d-e020-4922-8b94-2b3fc9b951e7">Get Start</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#09ecdfca-117a-41d4-a2d1-39306c03dfee">What’s this</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#722366b2-18b7-450b-880f-e36559f96e12">实现方案</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#985eadbe-bfac-4dd9-a240-0c5540be7bfd">计数限流 or 固定窗口算法</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d548786e-8a8b-4b98-9632-5e69bb364719">滑动窗口算法</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#e648294d-2cff-4233-be7a-eecca500097c">滑动日志算法</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7dd8554e-b891-48a2-8fab-d035d09a1d6d">漏斗算法</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5027cce1-f248-496b-aa8b-001ef0500b7a">令牌桶算法</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#27ee0ba1-beee-4fd9-9bee-30fc366f918c">分布式限流</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#38992214-ffbb-408f-8363-f14544e23193">限流分类</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#78a59b8b-c608-4cc8-850f-d783c65ba0c5"><strong>熔断</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7f6c80c2-3065-46a2-be34-869bd483a2cd"><strong>服务降级</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ccf9db2f-8d27-4964-a4d3-2f644f5320da"><strong>延迟处理</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#fcab6c0b-dec9-49d1-b001-a7a1e0e31ffa"><strong>特权处理</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#58905d05-7aa3-48cd-b410-8cd877b816ae"><strong>缓存、降级、限流区别</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c1c54489-ed0b-4e98-b987-e441e9cf4572"><strong>限流的算法</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#2be81e2d-a1cf-46e9-ad77-81516251368a"><strong>计数器算法</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5d0a07a1-05b6-4375-a6e3-4b00ad702117"><strong>漏桶算法</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#16ede796-c2a3-4546-90b9-f1cd1130bf13"><strong>令牌桶算法</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d8b39727-02a3-413f-9612-31f1d67e4276"><strong>并发限流</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c9753444-7d39-4015-838d-7b344f68c86a"><strong>接口限流</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#74f64b8d-a674-4ab5-a406-4aa9e62eec15"><strong>接口总数</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c168d5f5-f3fd-437d-84e3-959ca88c5e42"><strong>接口时间窗口</strong></a></div></nav></div><div id="9f8f7dbb-af40-464a-931d-ec2b86e13405" style="width:81.25%" class="column"><h1 id="e11fed9d-e020-4922-8b94-2b3fc9b951e7" class="">Get Start</h1><h1 id="09ecdfca-117a-41d4-a2d1-39306c03dfee" class="">What’s this</h1><h1 id="722366b2-18b7-450b-880f-e36559f96e12" class="">实现方案</h1><h2 id="985eadbe-bfac-4dd9-a240-0c5540be7bfd" class="">计数限流 or 固定窗口算法</h2><h2 id="d548786e-8a8b-4b98-9632-5e69bb364719" class="">滑动窗口算法</h2><h2 id="e648294d-2cff-4233-be7a-eecca500097c" class="">滑动日志算法</h2><h2 id="7dd8554e-b891-48a2-8fab-d035d09a1d6d" class="">漏斗算法</h2><h2 id="5027cce1-f248-496b-aa8b-001ef0500b7a" class="">令牌桶算法</h2><h2 id="27ee0ba1-beee-4fd9-9bee-30fc366f918c" class="">分布式限流</h2><p id="e85aaba3-2fd3-452a-845a-2062e27d6751" class="">
+</p><h1 id="38992214-ffbb-408f-8363-f14544e23193" class="">限流分类</h1><p id="099f8527-35d8-4857-ab80-6fe6ecf81e42" class="">对系统服务进行限流，一般有如下几个模式：</p><h3 id="78a59b8b-c608-4cc8-850f-d783c65ba0c5" class=""><strong>熔断</strong></h3><p id="3b4b6e62-6411-408a-9b8e-0d6161ceed4b" class="">系统在设计之初就把熔断措施考虑进去。当系统出现问题时，如果短时间内无法修复，系统要自动做出判断，开启熔断开关，拒绝流量访问，避免大流量对后端的过载请求。</p><p id="473d4866-33cc-4984-913e-cf5915f3302d" class="">系统也应该能够动态监测后端程序的修复情况，当程序已恢复稳定时，可以关闭熔断开关，恢复正常服务。常见的熔断组件有Hystrix以及阿里的Sentinel，两种互有优缺点，可以根据业务的实际情况进行选择。</p><h3 id="7f6c80c2-3065-46a2-be34-869bd483a2cd" class=""><strong>服务降级</strong></h3><p id="42b54128-d131-464a-81d4-11fd6a0f21eb" class="">将系统的所有功能服务进行一个分级，当系统出现问题需要紧急限流时，可将不是那么重要的功能进行降级处理，停止服务，这样可以释放出更多的资源供给核心功能的去用。</p><p id="5ab4b37e-7c26-4751-be72-502f0c6dcfa6" class="">例如在电商平台中，如果突发流量激增，可临时将商品评论、积分等非核心功能进行降级，停止这些服务，释放出机器和CPU等资源来保障用户正常下单，而这些降级的功能服务可以等整个系统恢复正常后，再来启动，进行补单/补偿处理。除了功能降级以外，还可以采用不直接操作数据库，而全部读缓存、写缓存的方式作为临时降级方案。</p><h3 id="ccf9db2f-8d27-4964-a4d3-2f644f5320da" class=""><strong>延迟处理</strong></h3><p id="55b22bd4-901c-412d-8998-a166bddc5d9c" class="">这个模式需要在系统的前端设置一个流量缓冲池，将所有的请求全部缓冲进这个池子，不立即处理。然后后端真正的业务处理程序从这个池子中取出请求依次处理，常见的可以用队列模式来实现。这就相当于用异步的方式去减少了后端的处理压力，但是当流量较大时，后端的处理能力有限，缓冲池里的请求可能处理不及时，会有一定程度延迟。后面具体的漏桶算法以及令牌桶算法就是这个思路。</p><h3 id="fcab6c0b-dec9-49d1-b001-a7a1e0e31ffa" class=""><strong>特权处理</strong></h3><p id="19b28770-a6e1-4e15-b2d8-1c2235f602d7" class="">这个模式需要将用户进行分类，通过预设的分类，让系统优先处理需要高保障的用户群体，其它用户群的请求就会延迟处理或者直接不处理。</p><h3 id="58905d05-7aa3-48cd-b410-8cd877b816ae" class=""><strong>缓存、降级、限流区别</strong></h3><ul id="caae0571-505d-41d6-a876-92dd3bcc9c9a" class="bulleted-list"><li style="list-style-type:disc"><strong>缓存</strong>是用来增加系统吞吐量，提升访问速度提供高并发。</li></ul><ul id="ae9a1f53-4ca9-472b-91ba-1583de9266ca" class="bulleted-list"><li style="list-style-type:disc"><strong>降级</strong>是在系统某些服务组件不可用的时候、流量暴增、资源耗尽等情况下，暂时屏蔽掉出问题的服务，继续提供降级服务，给用户尽可能的友好提示，返回兜底数据，不会影响整体业务流程，待问题解决再重新上线服务</li></ul><ul id="079f9278-fa1f-4d21-be72-9882b463ceaa" class="bulleted-list"><li style="list-style-type:disc"><strong>限流</strong>是指在使用缓存和降级无效的场景。比如当达到阈值后限制接口调用频率，访问次数，库存个数等，在出现服务不可用之前，提前把服务降级。只服务好一部分用户。</li></ul><h3 id="c1c54489-ed0b-4e98-b987-e441e9cf4572" class=""><strong>限流的算法</strong></h3><p id="e9fd4d7b-34cb-4c1c-a948-46772446aab0" class="">限流算法很多，常见的有三类，分别是计数器算法、漏桶算法、令牌桶算法，下面逐一讲解。</p><h3 id="2be81e2d-a1cf-46e9-ad77-81516251368a" class=""><strong>计数器算法</strong></h3><p id="5fc1771b-c298-49b0-891a-f39e251fa5c2" class="">简单粗暴，比如指定线程池大小，指定数据库连接池大小、Nginx连接数等，这都属于计数器算法。</p><p id="cd7f9fe1-5267-4f09-8d48-fcfe0d32d6af" class="">计数器算法是限流算法里最简单也是最容易实现的一种算法。举个例子，比如我们规定对于A接口，我们1分钟的访问次数不能超过100个。那么我们可以这么做：在一开始的时候，我们可以设置一个计数器counter，每当一个请求过来的时候，counter就加1，如果counter的值大于100并且该请求与第一个请求的间隔时间还在1分钟之内，那么说明请求数过多，拒绝访问；如果该请求与第一个请求的间隔时间大于1分钟，且counter的值还在限流范围内，那么就重置counter，就是这么简单粗暴。</p><figure id="97a28977-e7a1-4126-89aa-851d2acf6f19" class="image"><a href="http://dockone.io/uploads/article/20211011/e342593dea5174f69f96ae91beb17a9a.png"><img src="http://dockone.io/uploads/article/20211011/e342593dea5174f69f96ae91beb17a9a.png"/></a></figure><h3 id="5d0a07a1-05b6-4375-a6e3-4b00ad702117" class=""><strong>漏桶算法</strong></h3><p id="2ac87e46-12ca-4696-b9fd-dd480a310fab" class="">漏桶算法思路很简单，水（请求）先进入到漏桶里，漏桶以一定的速度出水，当水流入速度过大会超过桶可接纳的容量时直接溢出，可以看出漏桶算法能强行限制数据的传输速率。</p><figure id="ca41449b-5439-42df-b5e2-607ac4d41c27" class="image"><a href="http://dockone.io/uploads/article/20211011/6f387c0770317bbb2baeece7490286a3.png"><img src="http://dockone.io/uploads/article/20211011/6f387c0770317bbb2baeece7490286a3.png"/></a></figure><p id="7d8ed97d-60de-44b4-b1ad-c7e50ec0e73e" class="">这样做的好处是：</p><ul id="41a5d87f-eb8b-4189-9dc0-e3ae11970434" class="bulleted-list"><li style="list-style-type:disc"><strong>削峰</strong>：有大量流量进入时，会发生溢出，从而限流保护服务可用</li></ul><ul id="efde7653-0ad4-4318-81de-705f4a96efc8" class="bulleted-list"><li style="list-style-type:disc"><strong>缓冲</strong>：不至于直接请求到服务器，缓冲压力</li></ul><figure id="2a2a2cbb-f541-48d6-9705-1f3ea656ccb4" class="image"><a href="http://dockone.io/uploads/article/20211011/6f387c0770317bbb2baeece7490286a3.png"><img src="http://dockone.io/uploads/article/20211011/6f387c0770317bbb2baeece7490286a3.png"/></a></figure><h3 id="16ede796-c2a3-4546-90b9-f1cd1130bf13" class=""><strong>令牌桶算法</strong></h3><p id="578e9ed9-d10d-44ae-adae-fda1b35916ef" class="">令牌桶与漏桶相似，不同的是令牌桶桶中放了一些令牌，服务请求到达后，要获取令牌之后才会得到服务，举个例子，我们平时去食堂吃饭，都是在食堂内窗口前排队的，这就好比是漏桶算法，大量的人员聚集在食堂内窗口外，以一定的速度享受服务，如果涌进来的人太多，食堂装不下了，可能就有一部分人站到食堂外了，这就没有享受到食堂的服务，称之为溢出，溢出可以继续请求，也就是继续排队，那么这样有什么问题呢？</p><p id="b66e7050-def4-444a-b2fb-7289f224dd16" class="">如果这时候有特殊情况，比如有些赶时间的志愿者啦、或者高三要高考啦，这种情况就是突发情况，如果也用漏桶算法那也得慢慢排队，这也就没有解决我们的需求，对于很多应用场景来说，除了要求能够限制数据的平均传输速率外，还要求允许某种程度的突发传输。这时候漏桶算法可能就不合适了，令牌桶算法更为适合。如图所示，令牌桶算法的原理是系统会以一个恒定的速度往桶里放入令牌，而如果请求需要被处理，则需要先从桶里获取一个令牌，当桶里没有令牌可取时，则拒绝服务。</p><figure id="e4aab29c-e4c9-4ebf-b568-c016b56e5dae" class="image"><a href="http://dockone.io/uploads/article/20211011/837be97d8284ec33792bd6f0f65bf626.png"><img src="http://dockone.io/uploads/article/20211011/837be97d8284ec33792bd6f0f65bf626.png"/></a></figure><p id="5acc442d-d92e-429a-a3d8-ca824e34d34f" class="">令牌桶好处就是，如果某一瞬间访问量剧增或者有突发情况，可以通过改变桶中令牌数量来改变连接数，就好比那个食堂排队吃饭的问题，如果现在不是直接去窗口排队，而是先来楼外拿饭票然后再去排队，那么有高三的学生时可以将增加饭票数量或者优先将令牌给高三的学生，这样比漏桶算法更加灵活。</p><h3 id="d8b39727-02a3-413f-9612-31f1d67e4276" class=""><strong>并发限流</strong></h3><p id="1687a9fa-866d-429f-9b3b-d4c861b66aed" class="">简单来说就是设置系统阈值总的QPS个数，这些也挺常见的，就拿Tomcat来说，很多参数就是出于这个考虑，例如配置的</p><pre id="277b948f-9962-4f22-a355-a6c5b9762822" class="code code-wrap"><code>acceptCount</code></pre><p id="b74d50bb-09a5-4a4e-aadd-5f6d6665bfcc" class="">设置响应连接数，</p><pre id="d29a9e27-588b-4f60-88f4-599bf24175e0" class="code code-wrap"><code>maxConnections</code></pre><p id="121f2d11-a360-4e39-9351-fffd4c0a07c1" class="">设置瞬时最大连接数，</p><pre id="eb2135d2-e97d-4fb6-aeae-985e5d0787df" class="code code-wrap"><code>maxThreads</code></pre><p id="24045ad4-75d0-4a94-98a1-e401558cb425" class="">设置最大线程数，在各个框架或者组件中，并发限流体现在下面几个方面：</p><ul id="cb3a3561-2b80-468b-b4f7-e4ecc00087dc" class="bulleted-list"><li style="list-style-type:disc">限制总并发数（如数据库连接池、线程池）</li></ul><ul id="f7996c11-ba1d-4420-ad6c-ee152eefa8a4" class="bulleted-list"><li style="list-style-type:disc">限制瞬时并发数（Nginx的limit_conn模块，用来限制瞬时并发连接数）</li></ul><ul id="441909c7-2c40-4156-9a77-f410154fbfb8" class="bulleted-list"><li style="list-style-type:disc">限制时间窗口内的平均速率（如Guava的RateLimiter、Nginx的limit_req模块，限制每秒的平均速率）</li></ul><ul id="405c6fa2-4fe2-47c8-9d46-4f66726556ba" class="bulleted-list"><li style="list-style-type:disc">其他的还有限制远程接口调用速率、限制MQ的消费速率。</li></ul><ul id="e0096294-d48c-45a6-8e3e-b2d303c18e1a" class="bulleted-list"><li style="list-style-type:disc">另外还可以根据网络连接数、网络流量、CPU或内存负载等来限流。</li></ul><p id="39a390b1-29bc-4c07-9134-abf2da2c4afa" class="">有了并发限流，就意味着在处理高并发的时候多了一种保护机制，不用担心瞬间流量导致系统挂掉或雪崩，最终做到有损服务而不是不服务；但是限流需要评估好，不能乱用，否则一些正常流量出现一些奇怪的问题而导致用户体验很差造成用户流失。</p><h3 id="c9753444-7d39-4015-838d-7b344f68c86a" class=""><strong>接口限流</strong></h3><p id="1f06f2ba-d43c-4d28-aa49-82faffd4c0f5" class="">接口限流分为两个部分，一是限制一段时间内接口调用次数，参照前面限流算法的计数器算法，二是设置滑动时间窗口算法。</p><h3 id="74f64b8d-a674-4ab5-a406-4aa9e62eec15" class=""><strong>接口总数</strong></h3><p id="8eff9415-cd81-499d-a96d-c4ef63a21024" class="">控制一段时间内接口被调用的总数量，可以参考前面的计数器算法，不再赘述。</p><h3 id="c168d5f5-f3fd-437d-84e3-959ca88c5e42" class=""><strong>接口时间窗口</strong></h3><p id="606a7900-9580-4a71-8ffa-ba571f7d97e1" class="">固定时间窗口算法（也就是前面提到的计数器算法）的问题是统计区间太大，限流不够精确，而且在第二个统计区间时没有考虑与前一个统计区间的关系与影响（第一个区间后半段 + 第二个区间前半段也是一分钟）。为了解决上面我们提到的临界问题，我们试图把每个统计区间分为更小的统计区间，更精确的统计计数。</p><figure id="eb4e8435-30ee-4996-9064-ba04e8a76e82" class="image"><a href="http://dockone.io/uploads/article/20211011/ccb393d8a248c03abdbe52b5f80c67cc.png"><img src="http://dockone.io/uploads/article/20211011/ccb393d8a248c03abdbe52b5f80c67cc.png"/></a></figure><p id="a8e60d53-ed65-4ef5-a4eb-d72790083555" class="">在上面的例子中，假设QPS可以接受100次查询/秒，前一分钟前40秒访问很低，后20秒突增，并且这个持续了一段时间，直到第二分钟的第40秒才开始降下来，根据前面的计数方法，前一秒的QPS为94，后一秒的QPS为92，那么没有超过设定参数，但是！但是在中间区域，QPS达到了142，这明显超过了我们的允许的服务请求数目，所以固定窗口计数器不太可靠，需要滑动窗口计数器。</p><p id="f79a024e-2420-4f0e-9e07-13c4f93dd27e" class="">计数器算法其实就是固定窗口算法，只是它没有对时间窗口做进一步地划分，所以只有1格；由此可见，当滑动窗口的格子划分的越多，也就是将秒精确到毫秒或者纳秒，那么滑动窗口的滚动就越平滑，限流的统计就会越精确。需要注意的是，消耗的空间就越多。</p><figure id="a4c2b294-9696-4844-a4c3-f27834ec1284" class="image"><a href="%E9%99%90%E6%B5%81%20f3ce05cb7e434d10a33f4201494eb5ad/Untitled.png"><img style="width:672px" src="%E9%99%90%E6%B5%81%20f3ce05cb7e434d10a33f4201494eb5ad/Untitled.png"/></a></figure></div></div><p id="a8b42081-d479-49cd-9ec3-1aa68ed1ea94" class="">
+</p></div></article></body></html>

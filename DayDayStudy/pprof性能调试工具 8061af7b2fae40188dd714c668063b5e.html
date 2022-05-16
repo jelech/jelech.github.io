@@ -1,0 +1,855 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>pprof性能调试工具</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="8061af7b-2fae-4018-8dd7-14c668063b5e" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🌏</span></div><h1 class="page-title">pprof性能调试工具</h1></header><div class="page-body"><p id="5bea1ff0-4226-4852-a93d-9fae7968164d" class=""><code>Golang pprof</code>是Golang官方的profiling工具，非常强大，使用也比较方便。</p><p id="6d857e7b-8163-4598-8bb3-51af18721679" class="">我们在程序中嵌入如下几行代码，</p><pre id="19b4f3a4-36fb-43e9-8f41-489e9fd5a74b" class="code code-wrap"><code>import _ &quot;net/http/pprof&quot;
+
+go func() {
+    http.ListenAndServe(&quot;0.0.0.0:8899&quot;, nil)
+}()</code></pre><p id="c8fa9eb7-b6fe-4da4-80e4-8999dfadb04d" class="">在浏览器中输入<code>http://ip:8899/debug/pprof/</code>可以看到一个汇总页面，</p><pre id="693d326e-dc79-4bf5-a11e-43d8c4a0f4dd" class="code"><code>/debug/pprof/
+
+profiles:
+0    block
+32    goroutine
+552    heap
+0    mutex
+51    threadcreate
+
+full goroutine stack dump</code></pre><p id="fe386d43-735b-41e1-907d-205699e426b1" class="">其中<code>heap</code>项是我们需要关注的信息，</p><pre id="61514f90-6fa7-423e-8a6a-e3ef3297e561" class="code"><code>heap profile: 96: 1582948832 [21847: 15682528480] @ heap/1048576
+91: 1527472128 [246: 4129210368] @ 0x471d87 0x471611 0x4718cd 0x4689bf 0x50deb9 0x50d7ac 0x75893b 0x45d801
+#    0x471d86    bytes.makeSlice+0x76                            /usr/local/go/src/bytes/buffer.go:231
+#    0x471610    bytes.(*Buffer).grow+0x140                        /usr/local/go/src/bytes/buffer.go:133
+#    0x4718cc    bytes.(*Buffer).Write+0xdc                        /usr/local/go/src/bytes/buffer.go:163
+#    0x4689be    io.(*multiWriter).Write+0x8e                        /usr/local/go/src/io/multi.go:60
+#    0x50deb8    github.com/CodisLabs/redis-port/pkg/rdb.createValueDump+0x198        go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:194
+#    0x50d7ab    github.com/CodisLabs/redis-port/pkg/rdb.(*Loader).NextBinEntry+0x28b    go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:176
+#    0x75893a    main.newRDBLoader.func1+0x23a                        go_workspace/src/github.com/CodisLabs/redis-port/cmd/utils.go:733
+......</code></pre><p id="e986e108-8d61-4d11-87ef-f173d5b3433e" class="">包括一些汇总信息，和各个go routine的内存开销，不过这里除了第一行信息比较直观，其他的信息太离散。可以看到当前使用的堆内存是1.58GB，总共分配过15.6GB。</p><pre id="b72b50a1-6def-429a-88fe-e229425a4a15" class="code"><code>heap profile: 96(inused_objects): 1582948832(inused_bytes) [21847(allocated_objects): 15682528480(allocted_bytes)] @ heap/1048576</code></pre><p id="4d8ec5b6-21f9-4182-9ab1-e243d6ea35f8" class="">更有用的信息我们需要借助<code>go tool pprof</code>来进行分析，</p><pre id="6ef90fd4-4334-4b41-9828-ce993dfb0eed" class="code"><code>go tool pprof -alloc_space/-inuse_space http://ip:8899/debug/pprof/heap</code></pre><p id="73b560d5-5f11-42ec-a72e-2fd74c1fb80f" class="">这里有两个选项，-alloc_space和-inuse_space，从名字应该能看出二者的区别，不过条件允许的话，我们优先使用-inuse_space来分析，因为直接分析导致问题的现场比分析历史数据肯定要直观的多，一个函数alloc_space多不一定就代表它会导致进程的RSS高，因为我们比较幸运可以在线下复现这个OOM的场景，所以直接用-inuse_space。</p><p id="37b09d98-04a2-481c-a260-9137f611db73" class="">这个命令进入后，是一个类似<code>gdb</code>的交互式界面，输入<code>top</code>命令可以前10大的内存分配，<code>flat</code>是堆栈中当前层的inuse内存值，cum是堆栈中本层级的累计inuse内存值（包括调用的函数的inuse内存值，上面的层级），</p><pre id="7d4311eb-f811-4f90-9982-4bc178f72c86" class="code"><code>(pprof) top
+Showing nodes accounting for 3.73GB, 99.78% of 3.74GB total
+Dropped 5 nodes (cum &lt;= 0.02GB)
+Showing top 10 nodes out of 16
+      flat  flat%   sum%        cum   cum%
+    3.70GB 98.94% 98.94%     3.70GB 98.94%  bytes.makeSlice /usr/local/go/src/bytes/buffer.go
+    0.03GB  0.83% 99.78%     0.03GB  0.83%  main.(*cmdRestore).Main /usr/local/go/src/bufio/bufio.go
+         0     0% 99.78%     3.70GB 98.94%  bytes.(*Buffer).Write /usr/local/go/src/bytes/buffer.go
+         0     0% 99.78%     3.70GB 98.94%  bytes.(*Buffer).grow /usr/local/go/src/bytes/buffer.go
+         0     0% 99.78%     3.70GB 98.94%  github.com/CodisLabs/redis-port/pkg/rdb.(*Loader).NextBinEntry go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go
+         0     0% 99.78%     3.70GB 98.94%  github.com/CodisLabs/redis-port/pkg/rdb.(*rdbReader).Read go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/reader.go
+         0     0% 99.78%     3.70GB 98.94%  github.com/CodisLabs/redis-port/pkg/rdb.(*rdbReader).ReadBytes go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/reader.go
+         0     0% 99.78%     3.70GB 98.94%  github.com/CodisLabs/redis-port/pkg/rdb.(*rdbReader).ReadString go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/reader.go
+         0     0% 99.78%     3.70GB 98.94%  github.com/CodisLabs/redis-port/pkg/rdb.(*rdbReader).readFull go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/reader.go
+         0     0% 99.78%     3.70GB 98.94%  github.com/CodisLabs/redis-port/pkg/rdb.(*rdbReader).readObjectValue go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/reader.go</code></pre><p id="1c0a5b75-acdf-41bd-b496-038d9109d21c" class="">可以看到大部分内存都是<code>bytes.makeSlice</code>产生的（flat 98.94%），不过这是一个标准库函数，再撸撸代码，往下看可以看到redis-port实现的函数<code>(*Loader).NextBinEntry</code>，这里推荐使用<code>list</code>命令</p><pre id="936431dc-e5b4-4527-b88a-f5571e31193e" class="code"><code>(pprof) list NextBinEntry
+Total: 3.74GB
+ROUTINE ======================== github.com/CodisLabs/redis-port/pkg/rdb.(*Loader).NextBinEntry in go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go
+         0     3.70GB (flat, cum) 98.94% of Total
+         .          .    137:           default:
+         .          .    138:                   key, err := l.ReadString()
+         .          .    139:                   if err != nil {
+         .          .    140:                           return nil, err
+         .          .    141:                   }
+         .     3.70GB    142:                   val, err := l.readObjectValue(t)
+         .          .    143:                   if err != nil {
+         .          .    144:                           return nil, err
+         .          .    145:                   }
+         .          .    146:                   entry.DB = l.db
+         .          .    147:                   entry.Key = key</code></pre><p id="27947e99-1311-4b0a-ae41-f743ec8a8348" class="">可以直接看到这个函数在哪一行代码产生了多少的内存！不过如果是在可以方便导出文件的测试环境，推荐使用命令，</p><pre id="1929c030-587d-49ae-8c81-700cc4d5065c" class="code"><code>go tool pprof -inuse_space -cum -svg http://ip:8899/debug/pprof/heap &gt; heap_inuse.svg</code></pre><figure id="5e6166ca-3427-4f39-b504-8799a6c7133b" class="image"><a href="pprof%E6%80%A7%E8%83%BD%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%208061af7b2fae40188dd714c668063b5e/Untitled.png"><img style="width:974px" src="pprof%E6%80%A7%E8%83%BD%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%208061af7b2fae40188dd714c668063b5e/Untitled.png"/></a></figure><p id="af3efe8f-d9ae-4cc4-88a3-03e0741ca0d7" class="">这个可以得到前后调用关系的调用栈图，同时还包括每一层的inuse 内存大小，文件名，函数，到下一层的内存大小，分析起来简直不能再顺手。</p><p id="bd313ae1-2c78-40ab-bf43-f4b0a9f5d477" class="">最后定位原因就比较简单了，redis-port在解析RDB时，是按key为粒度来处理的，遇到大key时，value可能有好几个GB，然后redis-port直接使用了标准库<code>bytes.Buffer</code>来存储解析出来的value（对于redis hash来说是field，value对），Buffer在空间不够的时候会自己<code>grow</code>，策略是当前capacity 2倍的增长速度，避免频繁内存分配，看看标准库的代码（go 1.9）</p><pre id="287ea779-45f2-49ed-b35e-5ba7e462c791" class="code"><code>// grow grows the buffer to guarantee space for n more bytes.
+// It returns the index where bytes should be written.
+// If the buffer can&#x27;t grow it will panic with ErrTooLarge.
+func (b *Buffer) grow(n int) int {
+......
+    } else {
+        // Not enough space anywhere, we need to allocate.
+        buf := makeSlice(2*cap(b.buf) + n)
+        copy(buf, b.buf[b.off:])
+        b.buf = buf
+    }
+......
+}</code></pre><p id="690a3e1a-27e6-461e-8115-3e3368ecd401" class="">Buffer在空间不够时，申请一个当前空间2倍的byte数组，然后把老的copy到这里，这个峰值内存就是3倍的开销，如果value大小5GB，读到4GB空间不够，那么创建一个8GB的新buffer，那么峰值就是12GB了，此外Buffer的初始大小是64字节，在增长到4GB的过程中也会创建很多的临时byte数组，gc不及时也是额外的内存开销，所以4.5GB的RDB，在有大key的情况下，峰值内存用到15GB也就可以理解了。</p><h3 id="b50a1363-eb7a-460c-8b11-2b764e4f2a18" class=""><strong>2.1 GCTRACE</strong></h3><p id="888b0ddb-59da-4e9c-9c0b-f66d2377ca1c" class="">Golang，自带gc，在不改动代码的情况下，我们可以设置<code>GODEBUG=&#x27;gctrace=1&#x27;</code>环境变量启动程序，来向标准错误输出打印<code>gc log</code>，</p><pre id="c35d4909-8426-4224-993f-92ec6f2e0343" class="code"><code>gc 21 @8.389s 0%: 0.069+4.0+0.16 ms clock, 1.6+2.8/14/10+4.0 ms cpu, 87-&gt;88-&gt;45 MB, 89 MB goal, 24 P
+gc 22 @8.919s 0%: 0.053+3.7+0.63 ms clock, 1.0+1.9/16/12+12 ms cpu, 87-&gt;88-&gt;44 MB, 90 MB goal, 24 P
+gc 23 @9.431s 0%: 0.055+3.9+0.18 ms clock, 1.3+2.6/15/13+4.5 ms cpu, 87-&gt;88-&gt;45 MB, 89 MB goal, 24 P
+gc 24 @9.948s 0%: 0.093+6.0+1.1 ms clock, 2.2+2.3/18/5.6+27 ms cpu, 87-&gt;88-&gt;44 MB, 90 MB goal, 24 P
+gc 25 @10.108s 0%: 0.026+10+0.55 ms clock, 0.63+0/12/15+13 ms cpu, 88-&gt;89-&gt;66 MB, 89 MB goal, 24 P
+gc 26 @10.407s 0%: 0.023+23+0.57 ms clock, 0.56+0/41/3.3+13 ms cpu, 178-&gt;178-&gt;133 MB, 179 MB goal, 24 P
+gc 27 @10.792s 0%: 0.024+45+0.58 ms clock, 0.58+0/63/2.5+14 ms cpu, 282-&gt;282-&gt;222 MB, 283 MB goal, 24 P
+gc 28 @11.560s 0%: 0.023+92+0.13 ms clock, 0.55+0/17/100+3.1 ms cpu, 520-&gt;520-&gt;399 MB, 521 MB goal, 24 P
+gc 29 @13.113s 0%: 0.035+186+0.53 ms clock, 0.85+0/21/187+12 ms cpu, 997-&gt;997-&gt;755 MB, 998 MB goal, 24 P
+gc 30 @14.490s 0%: 0.035+9.2+0.55 ms clock, 0.84+0.20/18/3.0+13 ms cpu, 858-&gt;858-&gt;518 MB, 1510 MB goal, 24 P
+gc 31 @16.208s 0%: 0.032+381+0.15 ms clock, 0.77+0/400/3.5+3.7 ms cpu, 1610-&gt;1610-&gt;1466 MB, 1611 MB goal, 24 P
+gc 32 @16.841s 0%: 0.024+9.6+0.12 ms clock, 0.59+0.12/15/6.7+3.0 ms cpu, 1488-&gt;1489-&gt;993 MB, 2932 MB goal, 24 P
+gc 33 @22.381s 0%: 0.026+752+0.14 ms clock, 0.64+0/18/760+3.3 ms cpu, 3358-&gt;3359-&gt;2888 MB, 3359 MB goal, 24 P
+gc 34 @23.237s 0%: 0.020+7.7+0.12 ms clock, 0.49+0.14/17/2.0+2.9 ms cpu, 2889-&gt;2889-&gt;1940 MB, 5776 MB goal, 24 P
+gc 35 @34.475s 0%: 0.032+9.9+0.11 ms clock, 0.77+0.65/17/9.3+2.7 ms cpu, 2910-&gt;2910-&gt;1940 MB, 3881 MB goal, 24 P
+gc 36 @34.732s 0%: 0.025+1412+0.13 ms clock, 0.60+0/1422/10+3.2 ms cpu, 5746-&gt;5746-&gt;5732 MB, 5747 MB goal, 24 P
+gc 37 @54.129s 0%: 0.028+9.9+0.12 ms clock, 0.67+0.95/18/11+3.0 ms cpu, 7274-&gt;7274-&gt;3836 MB, 11464 MB goal, 24 P
+gc 38 @59.297s 0%: 0.032+2910+0.13 ms clock, 0.78+0/2920/13+3.2 ms cpu, 11847-&gt;11847-&gt;11420 MB, 11848 MB goal, 24 P
+gc 39 @64.199s 02010.046+29024+0.32 ms clock, 1.1+0/18/3195+7.7 ms cpu, 15532-&gt;15532-&gt;11577 MB, 22840 MB goal, 24 P</code></pre><p id="772b7d68-db91-4d23-b343-8ecc54320d6e" class="">上面是部分gc log，gc后面的数字表示是<code>第几次gc</code>，@后面的数字表示<code>程序启动经历的时间</code>，后面几项和gc消耗的cpu时间有关，在分析gc导致的程序hang时很有用，但是不是我们这次关注的重点，主要看下倒数第2和第3项</p><pre id="f5c73a3f-46a6-4830-8b23-933e20e20cee" class="code code-wrap"><code>#-&gt;#-&gt;# MB  heap size at GC start, at GC end, and live heap
+# MB goal   goal heap size (这个解释一下，每次gc circle完，gc会根据当前分配的堆内存大小和GOGC环境变量，计算下一次gc的目标内存大小，如果后面内存使用没有超过这个goal，gc不会用力太猛)</code></pre><p id="ab7a1a5c-087e-4a70-af35-ae86dee9cc7c" class="">从这个gc log我们可以看到从某个时间点开始，内存使用开始猛增，gc基本没有回收多少内存，看了下源实例的key情况，主要是string类型和hash类型，而且hash类型存在大key（一个hash有2800w的member，不过不建议大家这么使用，尽量打散到单个hash 10w以内），所以这里怀疑是先从RDB读了一部分string，然后读到大key的时候内存突增。有了方向，要确认详细原因，就要祭出大杀器<code>Golang pprof</code>了。</p><h3 id="fde2e3cc-787e-45ac-99d2-3eb4d38fda0e" class=""><strong>2.2 Golang pprof</strong></h3><p id="3519fc4b-89eb-42b7-8135-dc6f136c233f" class="">分析内存使用要是光撸代码还是比较困难的，总要借助一些工具。<code>Golang pprof</code>是Golang官方的profiling工具，非常强大，使用也比较方便。</p><p id="021f0f9c-ab0d-4c6f-9cc0-c8d42214dc00" class="">我们在程序中嵌入如下几行代码，</p><pre id="a577c48e-718c-4837-9ebd-9f33fc25ec1d" class="code code-wrap"><code>import _ &quot;net/http/pprof&quot;
+
+go func() {
+    http.ListenAndServe(&quot;0.0.0.0:8899&quot;, nil)
+}()</code></pre><p id="d1c234c8-8872-4a3d-ab08-5477bad2059f" class="">在浏览器中输入<code>http://ip:8899/debug/pprof/</code>可以看到一个汇总页面，</p><pre id="712e3951-933e-4df2-965e-ced713ab8096" class="code code-wrap"><code>/debug/pprof/
+
+profiles:
+0    block
+32    goroutine
+552    heap
+0    mutex
+51    threadcreate
+
+full goroutine stack dump</code></pre><p id="14105458-0d3e-4e3d-942e-8680afffc4d8" class="">其中<code>heap</code>项是我们需要关注的信息，</p><pre id="be1c6248-049a-45fe-a8e6-bd9edccaec09" class="code"><code>heap profile: 96: 1582948832 [21847: 15682528480] @ heap/1048576
+91: 1527472128 [246: 4129210368] @ 0x471d87 0x471611 0x4718cd 0x4689bf 0x50deb9 0x50d7ac 0x75893b 0x45d801
+#    0x471d86    bytes.makeSlice+0x76                            /usr/local/go/src/bytes/buffer.go:231
+#    0x471610    bytes.(*Buffer).grow+0x140                        /usr/local/go/src/bytes/buffer.go:133
+#    0x4718cc    bytes.(*Buffer).Write+0xdc                        /usr/local/go/src/bytes/buffer.go:163
+#    0x4689be    io.(*multiWriter).Write+0x8e                        /usr/local/go/src/io/multi.go:60
+#    0x50deb8    github.com/CodisLabs/redis-port/pkg/rdb.createValueDump+0x198        go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:194
+#    0x50d7ab    github.com/CodisLabs/redis-port/pkg/rdb.(*Loader).NextBinEntry+0x28b    go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:176
+#    0x75893a    main.newRDBLoader.func1+0x23a                        go_workspace/src/github.com/CodisLabs/redis-port/cmd/utils.go:733
+......</code></pre><p id="bf457b18-b51c-4678-9e8e-0708078805d7" class="">包括一些汇总信息，和各个go routine的内存开销，不过这里除了第一行信息比较直观，其他的信息太离散。可以看到当前使用的堆内存是1.58GB，总共分配过15.6GB。</p><h3 id="852bfe73-dfbc-4716-ba3c-7d1ae92a1c58" class=""><strong>2.1 GCTRACE</strong></h3><p id="1b9bfc6e-6ae1-49e5-849d-f868321c2129" class="">Golang，自带gc，在不改动代码的情况下，我们可以设置<code>GODEBUG=&#x27;gctrace=1&#x27;</code>环境变量启动程序，来向标准错误输出打印<code>gc log</code>，</p><pre id="1fdba877-a0fb-4d2a-9d11-8b0e3e1cd480" class="code"><code>gc 21 @8.389s 0%: 0.069+4.0+0.16 ms clock, 1.6+2.8/14/10+4.0 ms cpu, 87-&gt;88-&gt;45 MB, 89 MB goal, 24 P
+gc 22 @8.919s 0%: 0.053+3.7+0.63 ms clock, 1.0+1.9/16/12+12 ms cpu, 87-&gt;88-&gt;44 MB, 90 MB goal, 24 P
+gc 23 @9.431s 0%: 0.055+3.9+0.18 ms clock, 1.3+2.6/15/13+4.5 ms cpu, 87-&gt;88-&gt;45 MB, 89 MB goal, 24 P
+gc 24 @9.948s 0%: 0.093+6.0+1.1 ms clock, 2.2+2.3/18/5.6+27 ms cpu, 87-&gt;88-&gt;44 MB, 90 MB goal, 24 P
+gc 25 @10.108s 0%: 0.026+10+0.55 ms clock, 0.63+0/12/15+13 ms cpu, 88-&gt;89-&gt;66 MB, 89 MB goal, 24 P
+gc 26 @10.407s 0%: 0.023+23+0.57 ms clock, 0.56+0/41/3.3+13 ms cpu, 178-&gt;178-&gt;133 MB, 179 MB goal, 24 P
+gc 27 @10.792s 0%: 0.024+45+0.58 ms clock, 0.58+0/63/2.5+14 ms cpu, 282-&gt;282-&gt;222 MB, 283 MB goal, 24 P
+gc 28 @11.560s 0%: 0.023+92+0.13 ms clock, 0.55+0/17/100+3.1 ms cpu, 520-&gt;520-&gt;399 MB, 521 MB goal, 24 P
+gc 29 @13.113s 0%: 0.035+186+0.53 ms clock, 0.85+0/21/187+12 ms cpu, 997-&gt;997-&gt;755 MB, 998 MB goal, 24 P
+gc 30 @14.490s 0%: 0.035+9.2+0.55 ms clock, 0.84+0.20/18/3.0+13 ms cpu, 858-&gt;858-&gt;518 MB, 1510 MB goal, 24 P
+gc 31 @16.208s 0%: 0.032+381+0.15 ms clock, 0.77+0/400/3.5+3.7 ms cpu, 1610-&gt;1610-&gt;1466 MB, 1611 MB goal, 24 P
+gc 32 @16.841s 0%: 0.024+9.6+0.12 ms clock, 0.59+0.12/15/6.7+3.0 ms cpu, 1488-&gt;1489-&gt;993 MB, 2932 MB goal, 24 P
+gc 33 @22.381s 0%: 0.026+752+0.14 ms clock, 0.64+0/18/760+3.3 ms cpu, 3358-&gt;3359-&gt;2888 MB, 3359 MB goal, 24 P
+gc 34 @23.237s 0%: 0.020+7.7+0.12 ms clock, 0.49+0.14/17/2.0+2.9 ms cpu, 2889-&gt;2889-&gt;1940 MB, 5776 MB goal, 24 P
+gc 35 @34.475s 0%: 0.032+9.9+0.11 ms clock, 0.77+0.65/17/9.3+2.7 ms cpu, 2910-&gt;2910-&gt;1940 MB, 3881 MB goal, 24 P
+gc 36 @34.732s 0%: 0.025+1412+0.13 ms clock, 0.60+0/1422/10+3.2 ms cpu, 5746-&gt;5746-&gt;5732 MB, 5747 MB goal, 24 P
+gc 37 @54.129s 0%: 0.028+9.9+0.12 ms clock, 0.67+0.95/18/11+3.0 ms cpu, 7274-&gt;7274-&gt;3836 MB, 11464 MB goal, 24 P
+gc 38 @59.297s 0%: 0.032+2910+0.13 ms clock, 0.78+0/2920/13+3.2 ms cpu, 11847-&gt;11847-&gt;11420 MB, 11848 MB goal, 24 P
+gc 39 @64.199s 02010.046+29024+0.32 ms clock, 1.1+0/18/3195+7.7 ms cpu, 15532-&gt;15532-&gt;11577 MB, 22840 MB goal, 24 P</code></pre><p id="00632c8d-3f48-4ea5-a557-704e09cbff3f" class="">上面是部分gc log，gc后面的数字表示是<code>第几次gc</code>，@后面的数字表示<code>程序启动经历的时间</code>，后面几项和gc消耗的cpu时间有关，在分析gc导致的程序hang时很有用，但是不是我们这次关注的重点，主要看下倒数第2和第3项</p><pre id="da7c4140-cc22-40c3-8cc9-79a88e1c5c2d" class="code"><code>#-&gt;#-&gt;# MB  heap size at GC start, at GC end, and live heap
+# MB goal   goal heap size (这个解释一下，每次gc circle完，gc会根据当前分配的堆内存大小和GOGC环境变量，计算下一次gc的目标内存大小，如果后面内存使用没有超过这个goal，gc不会用力太猛)</code></pre><p id="9c5871b1-751a-43d4-8367-e68d7b8f72e8" class="">从这个gc log我们可以看到从某个时间点开始，内存使用开始猛增，gc基本没有回收多少内存，看了下源实例的key情况，主要是string类型和hash类型，而且hash类型存在大key（一个hash有2800w的member，不过不建议大家这么使用，尽量打散到单个hash 10w以内），所以这里怀疑是先从RDB读了一部分string，然后读到大key的时候内存突增。有了方向，要确认详细原因，就要祭出大杀器<code>Golang pprof</code>了。</p><h3 id="f3d35e3d-e803-4096-b6e1-8a2b71e30618" class=""><strong>2.2 Golang pprof</strong></h3><p id="14974016-6672-4fe7-9e0b-864361fff105" class="">分析内存使用要是光撸代码还是比较困难的，总要借助一些工具。<code>Golang pprof</code>是Golang官方的profiling工具，非常强大，使用也比较方便。</p><p id="f5d3cab5-ba2b-40e7-9189-55ae6ee12bb0" class="">我们在程序中嵌入如下几行代码，</p><pre id="6d416de2-8d3a-4942-a707-e8d5d2d69bce" class="code code-wrap"><code>import _ &quot;net/http/pprof&quot;
+
+go func() {
+    http.ListenAndServe(&quot;0.0.0.0:8899&quot;, nil)
+}()</code></pre><p id="106e9cd9-9608-4295-95eb-4dfae03ee527" class="">在浏览器中输入<code>http://ip:8899/debug/pprof/</code>可以看到一个汇总页面，</p><pre id="abd5dadc-7445-46f8-a09e-aabf20173d8c" class="code code-wrap"><code>/debug/pprof/
+
+profiles:
+0    block
+32    goroutine
+552    heap
+0    mutex
+51    threadcreate
+
+full goroutine stack dump</code></pre><p id="90049d64-7cb7-4e77-9a88-8f2aa480b88a" class="">其中<code>heap</code>项是我们需要关注的信息，</p><pre id="64d90ce1-092c-4169-b212-7c845b6b714e" class="code"><code>heap profile: 96: 1582948832 [21847: 15682528480] @ heap/1048576
+91: 1527472128 [246: 4129210368] @ 0x471d87 0x471611 0x4718cd 0x4689bf 0x50deb9 0x50d7ac 0x75893b 0x45d801
+#    0x471d86    bytes.makeSlice+0x76                            /usr/local/go/src/bytes/buffer.go:231
+#    0x471610    bytes.(*Buffer).grow+0x140                        /usr/local/go/src/bytes/buffer.go:133
+#    0x4718cc    bytes.(*Buffer).Write+0xdc                        /usr/local/go/src/bytes/buffer.go:163
+#    0x4689be    io.(*multiWriter).Write+0x8e                        /usr/local/go/src/io/multi.go:60
+#    0x50deb8    github.com/CodisLabs/redis-port/pkg/rdb.createValueDump+0x198        go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:194
+#    0x50d7ab    github.com/CodisLabs/redis-port/pkg/rdb.(*Loader).NextBinEntry+0x28b    go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:176
+#    0x75893a    main.newRDBLoader.func1+0x23a                        go_workspace/src/github.com/CodisLabs/redis-port/cmd/utils.go:733
+......</code></pre><p id="083d7c3f-ea6a-4e84-b617-dd74484895e1" class="">包括一些汇总信息，和各个go routine的内存开销，不过这里除了第一行信息比较直观，其他的信息太离散。可以看到当前使用的堆内存是1.58GB，总共分配过15.6GB。</p><h3 id="a786c4e0-75ef-49de-b51e-4df7cffcbe2b" class=""><strong>2.1 GCTRACE</strong></h3><p id="1a14d361-1340-4be1-bc50-f9620e5f0b23" class="">Golang，自带gc，在不改动代码的情况下，我们可以设置<code>GODEBUG=&#x27;gctrace=1&#x27;</code>环境变量启动程序，来向标准错误输出打印<code>gc log</code>，</p><pre id="aa486ac8-fcf3-4148-bac6-2bf045af52d3" class="code"><code>gc 21 @8.389s 0%: 0.069+4.0+0.16 ms clock, 1.6+2.8/14/10+4.0 ms cpu, 87-&gt;88-&gt;45 MB, 89 MB goal, 24 P
+gc 22 @8.919s 0%: 0.053+3.7+0.63 ms clock, 1.0+1.9/16/12+12 ms cpu, 87-&gt;88-&gt;44 MB, 90 MB goal, 24 P
+gc 23 @9.431s 0%: 0.055+3.9+0.18 ms clock, 1.3+2.6/15/13+4.5 ms cpu, 87-&gt;88-&gt;45 MB, 89 MB goal, 24 P
+gc 24 @9.948s 0%: 0.093+6.0+1.1 ms clock, 2.2+2.3/18/5.6+27 ms cpu, 87-&gt;88-&gt;44 MB, 90 MB goal, 24 P
+gc 25 @10.108s 0%: 0.026+10+0.55 ms clock, 0.63+0/12/15+13 ms cpu, 88-&gt;89-&gt;66 MB, 89 MB goal, 24 P
+gc 26 @10.407s 0%: 0.023+23+0.57 ms clock, 0.56+0/41/3.3+13 ms cpu, 178-&gt;178-&gt;133 MB, 179 MB goal, 24 P
+gc 27 @10.792s 0%: 0.024+45+0.58 ms clock, 0.58+0/63/2.5+14 ms cpu, 282-&gt;282-&gt;222 MB, 283 MB goal, 24 P
+gc 28 @11.560s 0%: 0.023+92+0.13 ms clock, 0.55+0/17/100+3.1 ms cpu, 520-&gt;520-&gt;399 MB, 521 MB goal, 24 P
+gc 29 @13.113s 0%: 0.035+186+0.53 ms clock, 0.85+0/21/187+12 ms cpu, 997-&gt;997-&gt;755 MB, 998 MB goal, 24 P
+gc 30 @14.490s 0%: 0.035+9.2+0.55 ms clock, 0.84+0.20/18/3.0+13 ms cpu, 858-&gt;858-&gt;518 MB, 1510 MB goal, 24 P
+gc 31 @16.208s 0%: 0.032+381+0.15 ms clock, 0.77+0/400/3.5+3.7 ms cpu, 1610-&gt;1610-&gt;1466 MB, 1611 MB goal, 24 P
+gc 32 @16.841s 0%: 0.024+9.6+0.12 ms clock, 0.59+0.12/15/6.7+3.0 ms cpu, 1488-&gt;1489-&gt;993 MB, 2932 MB goal, 24 P
+gc 33 @22.381s 0%: 0.026+752+0.14 ms clock, 0.64+0/18/760+3.3 ms cpu, 3358-&gt;3359-&gt;2888 MB, 3359 MB goal, 24 P
+gc 34 @23.237s 0%: 0.020+7.7+0.12 ms clock, 0.49+0.14/17/2.0+2.9 ms cpu, 2889-&gt;2889-&gt;1940 MB, 5776 MB goal, 24 P
+gc 35 @34.475s 0%: 0.032+9.9+0.11 ms clock, 0.77+0.65/17/9.3+2.7 ms cpu, 2910-&gt;2910-&gt;1940 MB, 3881 MB goal, 24 P
+gc 36 @34.732s 0%: 0.025+1412+0.13 ms clock, 0.60+0/1422/10+3.2 ms cpu, 5746-&gt;5746-&gt;5732 MB, 5747 MB goal, 24 P
+gc 37 @54.129s 0%: 0.028+9.9+0.12 ms clock, 0.67+0.95/18/11+3.0 ms cpu, 7274-&gt;7274-&gt;3836 MB, 11464 MB goal, 24 P
+gc 38 @59.297s 0%: 0.032+2910+0.13 ms clock, 0.78+0/2920/13+3.2 ms cpu, 11847-&gt;11847-&gt;11420 MB, 11848 MB goal, 24 P
+gc 39 @64.199s 02010.046+29024+0.32 ms clock, 1.1+0/18/3195+7.7 ms cpu, 15532-&gt;15532-&gt;11577 MB, 22840 MB goal, 24 P</code></pre><p id="1c85a65b-1dd3-4231-8806-61f2576d113d" class="">上面是部分gc log，gc后面的数字表示是<code>第几次gc</code>，@后面的数字表示<code>程序启动经历的时间</code>，后面几项和gc消耗的cpu时间有关，在分析gc导致的程序hang时很有用，但是不是我们这次关注的重点，主要看下倒数第2和第3项</p><pre id="04e22dcf-0bab-44b3-bb8c-9505a9e5bea5" class="code"><code>#-&gt;#-&gt;# MB  heap size at GC start, at GC end, and live heap
+# MB goal   goal heap size (这个解释一下，每次gc circle完，gc会根据当前分配的堆内存大小和GOGC环境变量，计算下一次gc的目标内存大小，如果后面内存使用没有超过这个goal，gc不会用力太猛)</code></pre><p id="81d077f8-315f-47c3-a4a3-0ddc78e27edd" class="">从这个gc log我们可以看到从某个时间点开始，内存使用开始猛增，gc基本没有回收多少内存，看了下源实例的key情况，主要是string类型和hash类型，而且hash类型存在大key（一个hash有2800w的member，不过不建议大家这么使用，尽量打散到单个hash 10w以内），所以这里怀疑是先从RDB读了一部分string，然后读到大key的时候内存突增。有了方向，要确认详细原因，就要祭出大杀器<code>Golang pprof</code>了。</p><h3 id="81498082-4f97-4dee-bd8d-3d6e0cd55b52" class=""><strong>2.2 Golang pprof</strong></h3><p id="0e4bfe48-8dc5-4139-953a-4a02d4f86cad" class="">分析内存使用要是光撸代码还是比较困难的，总要借助一些工具。<code>Golang pprof</code>是Golang官方的profiling工具，非常强大，使用也比较方便。</p><p id="d77f9a12-a81c-4865-889f-36e9cbf2333e" class="">我们在程序中嵌入如下几行代码，</p><pre id="048b420e-d2ad-4df0-9def-d88c44965da2" class="code code-wrap"><code>import _ &quot;net/http/pprof&quot;
+
+go func() {
+    http.ListenAndServe(&quot;0.0.0.0:8899&quot;, nil)
+}()</code></pre><p id="78aef2ba-2c11-4d4c-9117-f4fc6e5c79db" class="">在浏览器中输入<code>http://ip:8899/debug/pprof/</code>可以看到一个汇总页面，</p><pre id="6e8e2c2d-1202-429c-bcea-89c76e613b67" class="code code-wrap"><code>/debug/pprof/
+
+profiles:
+0    block
+32    goroutine
+552    heap
+0    mutex
+51    threadcreate
+
+full goroutine stack dump</code></pre><p id="31465814-12d4-4f14-93f2-391c81ae62bf" class="">其中<code>heap</code>项是我们需要关注的信息，</p><pre id="09b57862-c169-431f-ba78-f22a3f72a436" class="code"><code>heap profile: 96: 1582948832 [21847: 15682528480] @ heap/1048576
+91: 1527472128 [246: 4129210368] @ 0x471d87 0x471611 0x4718cd 0x4689bf 0x50deb9 0x50d7ac 0x75893b 0x45d801
+#    0x471d86    bytes.makeSlice+0x76                            /usr/local/go/src/bytes/buffer.go:231
+#    0x471610    bytes.(*Buffer).grow+0x140                        /usr/local/go/src/bytes/buffer.go:133
+#    0x4718cc    bytes.(*Buffer).Write+0xdc                        /usr/local/go/src/bytes/buffer.go:163
+#    0x4689be    io.(*multiWriter).Write+0x8e                        /usr/local/go/src/io/multi.go:60
+#    0x50deb8    github.com/CodisLabs/redis-port/pkg/rdb.createValueDump+0x198        go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:194
+#    0x50d7ab    github.com/CodisLabs/redis-port/pkg/rdb.(*Loader).NextBinEntry+0x28b    go_workspace/src/github.com/CodisLabs/redis-port/pkg/rdb/loader.go:176
+#    0x75893a    main.newRDBLoader.func1+0x23a                        go_workspace/src/github.com/CodisLabs/redis-port/cmd/utils.go:733
+......</code></pre><p id="a61ee8cc-618a-4a92-ac4b-ab9a6182baa7" class="">包括一些汇总信息，和各个go routine的内存开销，不过这里除了第一行信息比较直观，其他的信息太离散。可以看到当前使用的堆内存是1.58GB，总共分配过15.6GB。</p><p id="81c0faf7-187f-4575-9346-27eac2d23735" class="">
+</p></div></article></body></html>

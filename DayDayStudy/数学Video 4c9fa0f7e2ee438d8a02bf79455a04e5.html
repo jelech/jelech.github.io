@@ -1,0 +1,669 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>数学Video</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4c9fa0f7-e2ee-438d-8a02-bf79455a04e5" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🪨</span></div><h1 class="page-title">数学Video</h1></header><div class="page-body"><h1 id="e5e413e1-49ad-4f6c-8f26-08d59a12f364" class="">Math</h1><h2 id="0caeeb01-8a43-4214-859a-c857e58c92d7" class="">斯坦福</h2><ol type="1" id="2212a778-4d4d-4fbf-90e2-4bfc931e9ec6" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1dq4y127TF">数学思维课</a></li></ol><ol type="1" id="9e6d1057-059f-4591-a257-c189c40e1d8e" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1Pg4y187Ed">凸优化</a></li></ol><ol type="1" id="5ed6e7f5-35eb-426f-b7f8-80b5c900999f" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1Qx411J7ER">傅里叶变换及其应用</a></li></ol><ol type="1" id="1aa52977-b06d-448a-89b2-b847ff566526" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV17h411W7bk">矩阵论与应用</a></li></ol><h2 id="34b8cf66-3f7a-4221-b49d-3a8d35d190f3" class="">CMU</h2><ol type="1" id="7da75354-d4e8-43a6-a465-8df2c00e36c6" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV12x411z7ot">凸优化</a></li></ol><ol type="1" id="8e38b2de-91fb-42ab-b39d-e5cb6775c4f0" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1J64y1F7nW">最优化进阶与随机方法</a></li></ol><ol type="1" id="3756a1e0-a7f8-420e-9bb9-005d8d72e363" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1RQ4y1Z7HL">离散微分几何</a></li></ol><h2 id="5a60605e-9cbb-4578-8667-724f82fd75bb" class="">加州伯克利</h2><ol type="1" id="a6bbc8ce-8239-43ea-9c3e-da8908e38a0a" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV19y4y1W7X1">最优化方法</a></li></ol><ol type="1" id="f7a1efd0-67c9-414f-a363-f18d82406b6b" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1gv411j7rd">数值分析</a></li></ol><ol type="1" id="4480efda-7320-4091-8abc-10215c9ac574" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1qB4y1A7t3">随机过程</a></li></ol><h2 id="7fa625b4-a85a-4b61-b67d-a6fde4119cb4" class="">牛津</h2><ol type="1" id="ad9ba9f3-afa9-418f-a1e2-c8347d36e2a7" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1sT4y1S7Aa">数值方法</a></li></ol><h2 id="801603f0-33c8-43c2-83e7-bcac7d9bee4b" class="">哈佛</h2><ol type="1" id="56d406db-8b51-48ba-bf04-c03bb77a4bfa" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1kE41157pa">概率论</a></li></ol><ol type="1" id="e99ccd50-67b1-42c5-97bb-d3fdbdb756f0" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1Ds41167HE">抽象代数</a></li></ol><h2 id="27a5e7d2-16b5-409f-b7c8-d0a4e0efa5ff" class="">MIT</h2><ol type="1" id="6880f82a-998e-4dc7-9d27-b4ea900ff061" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV19s41167TE">概率论</a></li></ol><ol type="1" id="d2112f47-d0d0-43c1-bdfc-bde6b5fa95ef" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV14t411N7uw">应用统计</a></li></ol><ol type="1" id="758b15bd-47a6-47e9-a4f1-df0f481c6f86" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1Qs41167VS">离散随机过程</a></li></ol><ol type="1" id="9b43e69f-6e2a-48ae-be08-bbcc4bcf2839" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1Qz4y167rb">傅里叶分析</a></li></ol><ol type="1" id="b14be79b-7936-4c65-8b85-fe6a33431f94" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1zx411g7gq">线性代数</a></li></ol><ol type="1" id="ed3cd7ee-161d-44fc-8309-3739aa29196e" class="numbered-list" start="6"><li><a href="https://www.bilibili.com/BV1fi4y1x7AH">线性代数</a></li></ol><ol type="1" id="f4e9a0ae-7e24-4e27-96e6-3fb5b544c91a" class="numbered-list" start="7"><li><a href="https://www.bilibili.com/BV1zh41167Uy">离散数学</a></li></ol><ol type="1" id="306a4e48-abd4-4ce8-890d-414b01f7a5c2" class="numbered-list" start="8"><li><a href="https://www.bilibili.com/BV1EJ41147q3">复分析</a></li></ol><ol type="1" id="0d3f4d61-fd2d-47e2-b834-6c91a28906a1" class="numbered-list" start="9"><li><a href="https://www.bilibili.com/BV1eM4y1g7De">微分方程</a></li></ol><ol type="1" id="53d9a3b1-60bd-45d7-ab0b-c7350d92dcb2" class="numbered-list" start="10"><li><a href="https://www.bilibili.com/BV1Ei4y1x73V">图论与可加组合学</a></li></ol><ol type="1" id="499b2b11-c431-44df-8f86-43bd9fa33b2e" class="numbered-list" start="11"><li><a href="https://www.bilibili.com/BV19T4y1M7W5">黎曼几何</a></li></ol><h2 id="50cddb15-0c8c-4561-ad3d-28687e6c18a7" class="">耶鲁</h2><ol type="1" id="ce4a880c-5708-4a4b-b710-f6fc56d25711" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1Kt411h7Ep">博弈论</a></li></ol><h1 id="197219fc-a2b1-49a2-9d5c-50944e9fa80d" class="">Computer Science</h1><h2 id="0b52d9f1-d520-4b11-acd7-d6beb64cbce0" class="">general</h2><ol type="1" id="ecc35298-7b02-4662-81a2-b0bf55448c0c" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1Wh411y7V9">CMU·Great Ideas in Theoretical Computer Science</a></li></ol><ol type="1" id="8727bdce-c994-44d0-a0d1-824948ba9cc3" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1x7411H7wa">MIT·The Missing Semester of Your CS Education</a></li></ol><ol type="1" id="4664273e-a8b6-42de-9ec0-036a2cfdd2aa" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1ER4y157uA">哈佛·CS50X 计算机入门</a></li></ol><ol type="1" id="8689f266-9cce-4d8d-b64d-e84d91451914" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1zs411h7t8">斯坦福·编程方法学</a></li></ol><ol type="1" id="918d3e8f-1409-44df-8995-007ed55e63f3" class="numbered-list" start="5"><li><a href="https://web.stanford.edu/class/cs101/">斯坦福·CS101</a></li></ol><ol type="1" id="90441993-3e90-41ad-8729-d5f56fef3a9c" class="numbered-list" start="6"><li><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/">MIT·Introduction to Computer Science and Programming in Python</a></li></ol><h2 id="f2d29f57-d24f-4408-9a63-bea69aeb43d0" class="">Algorithms and Data Structures</h2><ol type="1" id="095c8ae8-f358-430d-bd49-5eb38ef2951b" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1kf4y1w7Kn">MIT·经典算法</a></li></ol><ol type="1" id="2ae46ac0-c484-48b9-af16-150bd10e6416" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1fu41127MN">MIT·算法导论</a></li></ol><ol type="1" id="19c91cbb-bef4-4b42-acd9-0983abe2bc8f" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1iE411n7yJ">MIT·高级数据结构</a></li></ol><ol type="1" id="beb8df76-1dac-48fb-8f50-7180b864ec43" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV11E411u73m">MIT·高级算法</a></li></ol><ol type="1" id="0b61849b-bfda-4212-9247-53e3679732f5" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1sf4y1H7vb">MIT·数据结构与算法设计</a></li></ol><ol type="1" id="7e9e904f-2638-42f4-9044-5e98f15a1dc9" class="numbered-list" start="6"><li><a href="https://inst.eecs.berkeley.edu/~cs61b/sp20/index.html">伯克利·CS 61B</a></li></ol><ol type="1" id="bb946fe0-ce0d-410f-8230-d88486697262" class="numbered-list" start="7"><li><a href="https://web.stanford.edu/class/cs106b/">斯坦福·CS106B Programming Abstractions</a></li></ol><ol type="1" id="add6b3cb-9dcd-48ae-9baf-b1d7266e8f0b" class="numbered-list" start="8"><li><a href="https://www3.cs.stonybrook.edu/~skiena/373/videos/">CSE 373 &quot;The Algorithm Design Manual&quot;</a></li></ol><h2 id="70cee4f2-bffb-4dc2-acba-7b027e411e8b" class="">System and Architecture</h2><ol type="1" id="dbb05708-3217-468a-8dbe-c1cd41e6fe17" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1uK4y1e7ep">CMU·计算机系统介绍</a></li></ol><ol type="1" id="4ec4ffe6-49d1-4856-8f05-e75561ae9b27" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1ix411676b">加州伯克利·Operating System and Systems Programming</a></li></ol><ol type="1" id="5f089f4d-92f7-416a-8d0f-4d713c46cf1f" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1QA411F7ij">MIT·操作系统</a></li></ol><ol type="1" id="629e9fe0-8fa8-435b-9d33-e558b039cc7b" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1CU4y1P7PE">MIT·分布式系统</a></li></ol><ol type="1" id="a063db69-2f2f-4524-8b9a-078a052f8182" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1jt411F7Wh">MIT·计算机系统安全</a></li></ol><ol type="1" id="2255a593-8630-4e04-8c7c-505caf9317d9" class="numbered-list" start="6"><li><a href="https://inst.eecs.berkeley.edu/~cs61c/fa20/">伯克利·CS 61C</a></li></ol><ol type="1" id="25b1372a-7237-448c-82d4-9de8a001646e" class="numbered-list" start="7"><li>CMU·15-213：<a href="https://www.bilibili.com/video/BV1iW411d7hd">B 站翻译</a> , <a href="http://www.cs.cmu.edu/~213/">课程网页</a></li></ol><ol type="1" id="1e9ad5c4-7400-4d03-a62c-426fd13fd5b4" class="numbered-list" start="8"><li><a href="http://web.stanford.edu/class/cs107/">斯坦福·CS 107</a></li></ol><ol type="1" id="9b0eee1e-50e4-4841-84a6-054b850f86eb" class="numbered-list" start="9"><li><a href="https://space.bilibili.com/202224425/channel/collectiondetail?sid=192498">南京大学·操作系统</a></li></ol><h2 id="a7883ba9-1c38-4466-b4e5-45e9ca26deca" class="">Artificial Intelligence (general)</h2><blockquote id="6b0d96bd-620f-423c-84bb-b3cd13106b2e" class="">单独推荐两个 up 主，跟李沐学AI 和 shuhuai008，前者是讲深度学习的，后者是讲统计学习的，都非常棒 🎉。</blockquote><ol type="1" id="af1ab6e6-92dc-49fc-8e01-cf87a2aae6fc" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1pC4y1t7px">CMU·人工智能 (研究生)</a></li></ol><ol type="1" id="e0082919-65c6-446b-9100-497c9484184d" class="numbered-list" start="2"><li><a href="https://www.youtube.com/watch?v=KKT2VkTdFyc&amp;list=RDLVKKT2VkTdFyc&amp;start_radio=1&amp;rv=KKT2VkTdFyc&amp;t=5">李宏毅·Deep Learning Theory</a></li></ol><ol type="1" id="f3f0850c-0808-4462-b009-27cac5e0ad5c" class="numbered-list" start="3"><li><a href="https://www.youtube.com/watch?v=XnyM3-xtxHs&amp;list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4">李宏毅·Next Step of Machine Learning</a></li></ol><ol type="1" id="d8e959d3-e0c9-4363-a2d3-fab081c68413" class="numbered-list" start="4"><li><a href="https://www.youtube.com/watch?v=IzHoNwlCGnE&amp;list=PLJV_el3uVTsPMxPbjeX7PicgWbY7F8wW9">李宏毅·Advanced Topics in Deep Learning</a></li></ol><ol type="1" id="ee824490-6be6-48a6-903a-e6dade1336a7" class="numbered-list" start="5"><li><a href="https://www.youtube.com/watch?v=CXgbekl66jc&amp;list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49">李宏毅·机器学习-v1</a>, <a href="https://www.youtube.com/watch?v=Ye018rCVvOo&amp;list=PLJV_el3uVTsMhtt7_Y6sgTHGHp1Vb2P2J">李宏毅·机器学习-v2</a>, <a href="https://www.youtube.com/watch?v=7XZR0-4uS5s&amp;list=PLJV_el3uVTsPM2mM-OQzJXziCGJa8nJL8">李宏毅·机器学习-v1</a>, <a href="https://www.youtube.com/watch?v=eybCCtNKwzA&amp;list=PLJV_el3uVTsM8QoIIe9JrSDjB0e1UkbEC">李宏毅·机器学习-TA 补充课</a></li></ol><ol type="1" id="b2a9c14a-7480-4a7f-9421-bde176bb5bea" class="numbered-list" start="6"><li><a href="https://www.bilibili.com/BV1qt411c7Na">MIT·深度学习</a></li></ol><ol type="1" id="213e1acc-6ec5-4010-9d1e-34eb0481534e" class="numbered-list" start="7"><li><a href="https://www.bilibili.com/BV1a7411M7wH">MIT·机器学习</a></li></ol><ol type="1" id="7393c760-00b8-4d49-a00a-ff6fee0f4583" class="numbered-list" start="8"><li><a href="https://www.bilibili.com/BV1Ht4y1U75j">斯坦福·人工智能原理与技术</a></li></ol><ol type="1" id="70709004-87dd-4452-b428-a11575ac6f7c" class="numbered-list" start="9"><li><a href="https://inst.eecs.berkeley.edu//~cs188/fa19/">伯克利·CS 188</a></li></ol><ol type="1" id="0717eafd-2e05-4d7a-bcac-b267ab0406ef" class="numbered-list" start="10"><li><a href="https://www.eecs189.org/">伯克利·CS 189</a></li></ol><h3 id="df073b3f-7a92-43cc-ba24-7327ca932ec7" class="">Computer Vision (CV)</h3><blockquote id="7fba9b8a-b309-46dd-beb1-b72009ee30d8" class="">李飞飞的 cs231n 我看过，感觉不咋地，就没加。</blockquote><ol type="1" id="fcde71f6-a9d2-48be-b505-913c9b1fdf5b" class="numbered-list" start="1"><li><a href="https://www.youtube.com/watch?v=DQNNMiAP5lw&amp;list=PLJV_el3uVTsMq6JEFPW35BCiOQTsoqwNw">李宏毅·GAN-2018</a>, <a href="https://www.youtube.com/watch?v=G0dZc-8yIjE&amp;list=PLJV_el3uVTsMd2G9ZjcpJn1YfnM9wVOBf">李宏毅·GAN-2017</a></li></ol><h3 id="80db2ff5-340b-4697-94c7-63d3b4282236" class="">Natural Language Processing (NLP)</h3><ol type="1" id="d308713e-5fa9-4abe-ad69-6fe638817049" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1dC4y1h788">CMU·自然语言处理</a></li></ol><ol type="1" id="cb2926fb-1e30-404d-8513-4e02e5273f1a" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1pt411h7aT">斯坦福·深度自然语言处理</a></li></ol><ol type="1" id="a3dfe414-2fd4-496c-9f95-bc2ef8f96fe1" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1H3411k7GA">CMU·高级自然语言处理</a></li></ol><ol type="1" id="84bbafcf-802c-4bbf-beb1-9561b2bad8b0" class="numbered-list" start="4"><li><a href="https://www.youtube.com/watch?v=nER51ZyJaCQ&amp;list=PLJV_el3uVTsO07RpBYFsXg-bN5Lu0nhdG">李宏毅·Deep Learning for Human Languange Processing</a></li></ol><ol type="1" id="291a7dac-bf29-4d92-a789-e478da3629a9" class="numbered-list" start="5"><li><a href="https://www.youtube.com/watch?v=z95ZYgPgXOY&amp;list=PLJV_el3uVTsODxQFgzMzPLa16h6B8kWM_">李宏毅·Deep Reinforcement Learning</a></li></ol><h3 id="fa6b6ec8-931d-4fb9-bca2-a2f597b78ab6" class="">Reinforcement Learning (RL)</h3><ol type="1" id="730de0ce-c021-418b-a7b8-90ccf9978909" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1sb411s7eQ">斯坦福·强化学习</a></li></ol><ol type="1" id="0c6c265b-f9f9-46e2-bcdc-4b25863d8f3b" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1KL4y1e7F7">MIT·识别，估计和学习</a></li></ol><ol type="1" id="16d9f2be-6f1f-4ae9-b857-093b790b6074" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1fx411S7S8">加州伯克利·深度强化学习</a></li></ol><h3 id="093e539e-6ede-4351-af2a-02f94cd85a2b" class="">Statistical Learning (SL)</h3><ol type="1" id="40f14811-b84e-46e0-a323-765b4559d643" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1KA41157yn">加州伯克利·统计机器学习</a></li></ol><ol type="1" id="bb3e10e7-786c-418f-8087-17c34d1c6b71" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1NW41177q4">斯坦福·统计学习</a></li></ol><h3 id="6da46b7b-74e4-4ee2-8b29-f818c07bd692" class="">Other Topics</h3><ol type="1" id="95a6750d-ef70-44bc-be3e-620c24a7fb36" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1MK4y1a7PS">CMU·结构化数据机器学习</a></li></ol><ol type="1" id="2bc70775-882b-40d3-8448-c562b1329060" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1uA411n7oV">加州理工·机器学习与统计推断基础</a></li></ol><ol type="1" id="58fea101-b57f-4b13-9c38-c4016619dd01" class="numbered-list" start="3"><li><a href="https://www.youtube.com/watch?v=5OYu0vxXEv8&amp;list=PLJV_el3uVTsNHQKxv49vpq7NSn-zim18V">李宏毅·Structured Learning</a></li></ol><ol type="1" id="69ddd613-bbf5-4dc6-b880-c5e2ba77d19e" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1Vg4y1z7Nf">斯坦福·图机器学习</a></li></ol><ol type="1" id="ed1697a6-1c70-46f6-ba19-c8c34af64eae" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV16s411q7o7">斯坦福·机器人学</a></li></ol><ol type="1" id="5e07fcb2-b48a-46e7-8473-72e5c5651e26" class="numbered-list" start="6"><li><a href="https://www.bilibili.com/BV1oa411c7eD">MIT·医疗机器学习</a></li></ol><h2 id="b65e8105-47f8-4eb3-b02a-d8a51898f462" class="">Data Science</h2><ol type="1" id="094cbd4c-e954-41e7-bb17-b49b75d75c8e" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1Pa411F7VP">CMU·应用数据科学</a></li></ol><ol type="1" id="eb97a80d-53b2-4268-b8f7-13d49586d549" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV19741117jR">加州伯克利·数据科学原理与技术</a></li></ol><ol type="1" id="7acdc9d3-8c46-4970-af81-4ec523dbd5df" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1ip4y1X7uY">加州理工·数据驱动算法设计</a></li></ol><ol type="1" id="4e39f96f-4460-4eca-9f87-6c19e7ac5cca" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1SC4y187x1">斯坦福·大数据概论</a></li></ol><ol type="1" id="f0e6fe9d-1276-498b-a18b-df08115df153" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1v54y1x7dQ">哈佛·大数据算法</a></li></ol><ol type="1" id="23bbafeb-49e3-464e-833a-edb4a3bb7d02" class="numbered-list" start="6"><li><a href="http://web.stanford.edu/class/cs246/">斯坦福·CS 246</a></li></ol><h2 id="3322319e-a526-49c4-979b-ca111b55b185" class="">Database</h2><ol type="1" id="b77353c6-4f3a-4a40-9d61-30450cd88bcb" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1Cp4y1C7dv">CMU·数据库系统介绍</a></li></ol><ol type="1" id="1d417dae-1ef9-45ad-95d3-313710659c25" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1rN411f7Ef">CMU·数据库系统</a></li></ol><ol type="1" id="69094825-7ceb-458f-be2b-56bfbf284b45" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1yb4y1n7rb">加州伯克利·数据库导论</a></li></ol><h2 id="6e703e19-03a4-4516-9acc-47e9bc4c64c3" class="">Parallel Computing</h2><ol type="1" id="1080d3c5-0b56-499b-aa1d-ef3491c479c4" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV16k4y1z7z9">CMU·并行计算结构与编程</a></li></ol><ol type="1" id="b8cea84a-9fbd-4e59-a42a-599325bc4c27" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1qV411q7RS">加州伯克利·并行计算应用</a></li></ol><ol type="1" id="af8785ce-d464-4340-a3dd-682950f1490d" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1QQ4y1o7rn">加州伯克利·并行程序设计导论</a></li></ol><h2 id="b31d3803-a1a5-4052-89c1-8a72a8bc7a42" class="">Software Engineering</h2><ol type="1" id="e534b540-54f7-40be-b491-84d47f670d8e" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1aW411E7yr">康奈尔·软件工程</a></li></ol><ol type="1" id="16b4e987-3a3f-45c7-b507-e1bc13bd8a72" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1qA411n7X5">CMU·智能系统软件工程</a></li></ol><h2 id="039273d0-dd39-46ac-8543-a460872da74a" class="">Compiler</h2><ol type="1" id="c8f42cab-97f1-4370-820f-fff4b93aed7c" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1NW41177q4">斯坦福·编译原理</a></li></ol><ol type="1" id="b3dba0c5-f273-4621-9354-3eeb31fce9ea" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1hZ4y1L7X4">康奈尔·高级编译原理</a></li></ol><h2 id="d2542748-2699-42dd-8dce-68613fbbb895" class="">Computer Network</h2><ol type="1" id="073fa55d-b5b3-45d9-b89c-0dfe56c1ba3f" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1wT4y1A7cd">CMU·计算机网络</a></li></ol><ol type="1" id="801472e7-d0ad-4862-bac7-9dc5f4399ca7" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV137411Z7LR">斯坦福·计算机网络</a></li></ol><ol type="1" id="39e42673-6e81-428b-9166-7b8d21f0d7a6" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1yA411s7Tp">斯坦福·网络安全</a></li></ol><h2 id="71c8e4ac-404f-4786-928f-244bf1741f99" class="">Computer Graphics</h2><ol type="1" id="40274283-0a67-448c-bc51-0ae4b4eeb71d" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1QZ4y1K7ga">CMU·计算机图形学</a></li></ol><ol type="1" id="92be7976-8567-425b-924d-bb6dc0189a8e" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1X7411F744">闫令琪·现代计算机图形学入门</a></li></ol><ol type="1" id="946e7fc5-86e3-4c43-ae7b-622bc579e9df" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV167411g7iK">MIT·计算机图形学</a></li></ol><h2 id="71c28ab5-3d71-47d0-a081-11e42c3c1f93" class="">Others</h2><ol type="1" id="250e567b-1336-4811-b4fd-bbd6ed726ed4" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1Bb411v7YH">CMU·人机交互系列讲座</a></li></ol><ol type="1" id="db797e8b-690d-4f72-b58b-80a635271cdd" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1FL411K7vK">普林斯顿·比特币与加密技术</a></li></ol><ol type="1" id="e49ef2c6-5e7e-4d72-9e23-dc2b4b88f143" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1Ht411w7Re">斯坦福·密码学</a></li></ol><ol type="1" id="a9524076-bc08-467e-bb95-36df24b31fa6" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1G7411k7jG">斯坦福·C++ 中的抽象编程</a></li></ol><ol type="1" id="45edb73a-f2a4-49fd-be25-d8de7c790037" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1AA411t7Wk">MIT·计算机程序的构造与解释</a></li></ol><ol type="1" id="f31c1352-f98b-4de5-8ab9-0418369409fb" class="numbered-list" start="6"><li><a href="https://www.bilibili.com/BV1L4411H7w3">MIT·信号与系统</a></li></ol><ol type="1" id="a9e11220-3561-4ab4-8ee1-0d2f659a2d32" class="numbered-list" start="7"><li><a href="https://www.bilibili.com/BV1CZ4y1j7hs">奥本海姆·MIT·信号与系统</a></li></ol><ol type="1" id="18f777ee-be7b-4a7a-bb00-b014ecc06a8c" class="numbered-list" start="8"><li><a href="https://www.bilibili.com/BV197411s736">MIT·计算结构</a></li></ol><ol type="1" id="75be505a-f4b0-48ca-8d03-b706f0f52ea0" class="numbered-list" start="9"><li><a href="https://www.bilibili.com/BV1mq4y1u7NB">MIT·python 编程</a></li></ol><ol type="1" id="7f987fd0-24db-4597-9fb1-8242a45de414" class="numbered-list" start="10"><li><a href="https://www.bilibili.com/BV1pK4y1r7Jf">MIT·区块链与金钱</a></li></ol><h1 id="df7337d8-0601-4476-a05d-701683ccf419" class="">Economics</h1><ol type="1" id="15c384a8-c060-4502-8bf0-dbc6933d9951" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1ab411b7jq">耶鲁·金融市场</a></li></ol><ol type="1" id="027eda94-ff50-4f66-94dc-6b5e2bf3dadb" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1MV411U75D">MIT·微观经济学</a></li></ol><ol type="1" id="e28b7afc-e7d7-42f1-a17f-e3fd69d517ad" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1Ft4112796">MIT·金融理论</a></li></ol><ol type="1" id="8bbc7e99-31d2-4726-bfd9-9f3289b6dd27" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV11U4y1g78u">MIT·行为经济学</a></li></ol><h1 id="a40117fa-0450-4c44-9cca-5059e367420b" class="">Physics</h1><ol type="1" id="727dd787-5bee-463e-bd5e-88a0c810f0c6" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1w4411s7da">斯坦福·量子力学</a></li></ol><ol type="1" id="1a286126-45ef-4adc-b050-5fd5d28e93a1" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1tE411R75K">斯坦福·广义相对论</a></li></ol><ol type="1" id="79f340d9-9c18-4a4b-8fef-74e5aaa3f976" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1CE411Q7Cc">斯坦福·弦理论和 M 理论</a></li></ol><h1 id="48cc4fa5-040c-47d9-bbc4-ffc47e2c6cf9" class="">Psychology</h1><ol type="1" id="83b782c2-7166-41e3-bbeb-13142c2f4be7" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1UJ411c7d8">加州伯克利·心理统计学</a></li></ol><ol type="1" id="88e1fa5e-a997-427a-b085-17c5d09df383" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1Hx411u7SK">加州伯克利·社会认知心理学</a></li></ol><ol type="1" id="b9911c8c-a626-4c3a-b1ac-020b03b7d892" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1Ps411Z7h1">耶鲁·心理学导论</a></li></ol><ol type="1" id="6e745c3f-a76d-4d2c-840c-42b2efd446f4" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1ga41127Zt">哈佛·积极心理学</a></li></ol><ol type="1" id="8a932c9e-8fd2-40cd-9b4e-d2d9946fc123" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1hZ4y1w7kd">哈佛·心理学导论</a></li></ol><ol type="1" id="aaa1dae1-a477-4f12-b8c5-09777996b5b7" class="numbered-list" start="6"><li><a href="https://www.bilibili.com/BV1px411d7xr">哈佛·幸福课</a></li></ol><h1 id="8988b501-c9b6-4a5e-a3b4-6243f4213a9b" class="">Metaphysics</h1><ol type="1" id="ba81d494-fbdc-4c86-bdd5-54ac73f068f8" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV1ux411r736">耶鲁·现代社会理论基础</a></li></ol><ol type="1" id="01e12013-92f2-4578-94e6-632a0ff534be" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1x5411g7R5">耶鲁·资本主义</a></li></ol><ol type="1" id="92b6dabc-9343-413d-8769-62629a8b9016" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1wx411y7uW">耶鲁·政治哲学导论</a></li></ol><ol type="1" id="6ac21a66-4905-4735-8d9e-2b9f9d853a05" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1FF411Y72Y">斯坦福·人类行为生物学</a></li></ol><ol type="1" id="bbab0aca-8223-4881-923c-06fd9c8fa862" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1av411e778">剑桥·美学</a></li></ol><h1 id="4f4659dd-478f-4a43-82a1-d8b83754eaa0" class="">Others</h1><ol type="1" id="93594345-f888-4b2c-8438-54aaae71f03b" class="numbered-list" start="1"><li><a href="https://www.bilibili.com/BV14q4y1R7Ra">MIT·几何折叠算法</a></li></ol><ol type="1" id="b322bc01-3381-4168-9686-e580360a423f" class="numbered-list" start="2"><li><a href="https://www.bilibili.com/BV1KK4y1s7mY">斯坦福·如何创业</a></li></ol><ol type="1" id="93d85673-4891-43c4-af9b-3c5b32689f56" class="numbered-list" start="3"><li><a href="https://www.bilibili.com/BV1zv41177JQ">斯坦福·SCI 论文写作课程</a></li></ol><ol type="1" id="53045f62-65db-43c8-9c07-3aa1fc6e4ea6" class="numbered-list" start="4"><li><a href="https://www.bilibili.com/BV1hp4y1t7zq">欧丽娟说红楼梦</a></li></ol><ol type="1" id="90518228-851c-4e46-b1d9-39be56f5d531" class="numbered-list" start="5"><li><a href="https://www.bilibili.com/BV1dj411f7vb">罗翔讲刑法</a></li></ol><ol type="1" id="18356705-ac55-4652-9e61-ae71d0c4b86f" class="numbered-list" start="6"><li><a href="https://www.bilibili.com/BV1sW411a7nM">耶鲁·聆听音乐</a></li></ol><ol type="1" id="97f87ebc-26e5-4052-9020-e05e4c69cac5" class="numbered-list" start="7"><li><a href="https://www.bilibili.com/BV15s411x7LU">耶鲁·文学理论导论</a></li></ol><ol type="1" id="013ff970-b728-4979-8284-abf8d9cedc56" class="numbered-list" start="8"><li><a href="https://www.bilibili.com/BV1KK4y1P7Df">耶鲁·如何管理情绪</a></li></ol><ol type="1" id="1805396a-0265-4fda-b457-f2ee00f77bea" class="numbered-list" start="9"><li><a href="https://www.bilibili.com/BV13T4y1L7AT">耶鲁·谈判概论</a></li></ol></div></article></body></html>

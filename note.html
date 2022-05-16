@@ -1,0 +1,670 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Day Day Study</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="12613cca-5128-4aba-b0f4-770ef8cc8524" class="page mono"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/nasa_robert_stewart_spacewalk.jpg" style="object-position:center 50.029999999999994%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">📖</span></div><h1 class="page-title">Day Day Study</h1></header><div class="page-body"><div id="6c149890-fede-4e2c-b43f-e39dd5199e9d" class="column-list"><div id="b5e0276e-1a01-4850-bc5d-4a5dd86906cf" style="width:56.25%" class="column"><figure id="75ef831a-39a5-4796-a9a1-676196e4d8b2" class="image"><a href="DayDayStudy/270f9924055913ee805e76bebb1e7349.jpg"><img style="width:480px" src="DayDayStudy/270f9924055913ee805e76bebb1e7349.jpg"/></a></figure></div><div id="118da790-85ae-4307-98f1-eff472002a8a" style="width:43.75%" class="column"><ul id="e8c88f8a-ad1d-40a8-a40b-e3c825e2fd3f" class="toggle"><li><details open=""><summary>操作系统知识</summary><figure id="59e859f2-45e8-4e0a-8be8-3b6c44dd0cfc" class="link-to-page"><a href="DayDayStudy/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%2059e859f245e84e0a8be83b6c44dd0cfc.html"><span class="icon">📍</span>操作系统原理</a></figure><figure id="96260752-bcc8-4258-a738-6eddb029eb4e" class="link-to-page"><a href="DayDayStudy/linux%E5%91%BD%E4%BB%A4%2096260752bcc84258a7386eddb029eb4e.html"><span class="icon">🚃</span>linux命令</a></figure></details></li></ul><ul id="52936e43-c989-409a-9cad-e390a528b0a5" class="toggle"><li><details open=""><summary>网络知识</summary><figure id="a949531a-0560-4674-80b4-f73adc3f667d" class="link-to-page"><a href="DayDayStudy/%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C%E9%82%A3%E4%BA%9B%E4%BA%8B%20a949531a0560467480b4f73adc3f667d.html"><span class="icon">♣️</span>基础网络那些事</a></figure><figure id="8356d7de-1cf1-477f-8451-b49d60138381" class="link-to-page"><a href="DayDayStudy/TCP%20UDP%E9%82%A3%E4%BA%9B%E4%BA%8B%208356d7de1cf1477f8451b49d60138381.html"><span class="icon">🌩️</span>TCP/UDP那些事</a></figure><figure id="f1538f88-2a47-498a-b29c-89669468102b" class="link-to-page"><a href="DayDayStudy/HTTP%E9%82%A3%E4%BA%9B%E4%BA%8B%20f1538f882a47498ab29c89669468102b.html"><span class="icon">🎈</span>HTTP那些事</a></figure></details></li></ul><ul id="dc143598-b877-4fd2-b25f-5a9920685f00" class="toggle"><li><details open=""><summary>Go语言</summary><figure id="14bb0755-36a6-4457-8b18-f482949d263d" class="link-to-page"><a href="DayDayStudy/%E4%B8%80%E8%B5%B7%E5%AD%A6Go%EF%BC%88%E4%B8%80%EF%BC%89%2014bb075536a644578b18f482949d263d.html"><span class="icon">👾</span>一起学Go（一）</a></figure><figure id="1a1a1cd1-3047-4ace-9e2e-af8b81cca2fb" class="link-to-page"><a href="DayDayStudy/%E4%B8%80%E8%B5%B7%E5%AD%A6Go%EF%BC%88%E4%BA%8C%EF%BC%89%201a1a1cd130474ace9e2eaf8b81cca2fb.html"><span class="icon">👾</span>一起学Go（二）</a></figure><figure id="ffce820f-efe7-4c44-b47f-e048ff38c104" class="link-to-page"><a href="DayDayStudy/GO%E9%AB%98%E6%80%A7%E8%83%BD%E7%BC%96%E7%A8%8B%20ffce820fefe74c44b47fe048ff38c104.html"><span class="icon">📖</span>GO高性能编程</a></figure><figure id="8061af7b-2fae-4018-8dd7-14c668063b5e" class="link-to-page"><a href="DayDayStudy/pprof%E6%80%A7%E8%83%BD%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%208061af7b2fae40188dd714c668063b5e.html"><span class="icon">🌏</span>pprof性能调试工具</a></figure></details></li></ul><ul id="d3385059-5452-4b6e-a019-e33db852d27d" class="toggle"><li><details open=""><summary>版本控制Git</summary><figure id="dd7f1023-c6c2-47bb-8c08-b7fe0548facc" class="link-to-page"><a href="DayDayStudy/Git%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%20dd7f1023c6c247bb8c08b7fe0548facc.html"><span class="icon">🎴</span>Git基本使用</a></figure><figure id="badace56-0d4c-484a-a6b4-d2046ed55de5" class="link-to-page"><a href="DayDayStudy/GitLFS%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%20badace560d4c484aa6b4d2046ed55de5.html"><span class="icon">🧶</span>GitLFS源码解析</a></figure></details></li></ul><ul id="832f5090-b481-494b-877b-6ef4382edf19" class="toggle"><li><details open=""><summary>关系数据库</summary><p id="508fedec-ee25-4049-8e18-980637278644" class="">Mysql</p><p id="73f82487-eb64-410f-8435-307a12a05a34" class="">PostgreSql</p></details></li></ul><ul id="d537d1fb-bc61-4ab2-92a8-c887c5d15f20" class="toggle"><li><details open=""><summary>NoSQL数据库</summary><p id="b11fdea1-ee20-44ef-85c3-99aa3559a946" class="">MongoDB使用</p></details></li></ul><ul id="be8a068c-359c-4647-a063-55e0946a9af3" class="toggle"><li><details open=""><summary>数据库通用</summary><p id="c2efa00d-eb53-4f43-8698-33a4bba7e2fc" class="">数据库事务</p><p id="9fb545c1-9eea-49c9-a3d1-8dadb5760606" class="">ACID</p><p id="477d7bc6-a74f-4202-811f-00a6bcf23cc4" class="">ORMs</p><p id="38435977-5af7-4bc1-8e1e-6782069a81c9" class="">N+1问题</p></details></li></ul><ul id="c66642e8-b65b-4c79-a2db-d51a18d187a8" class="toggle"><li><details open=""><summary>API定义与对接</summary><p id="33f8f68f-0a7e-4f9f-bcfd-ffc8c5bef303" class="">REST接口</p><p id="86c76085-2204-4599-98a2-4dd57e0180c4" class="">JSON APIs接口</p><p id="914ad32a-7f2e-4b09-9476-d8743b28192d" class="">SOAP</p><p id="2d153876-0135-473a-8d0b-d2549b33ec74" class="">gRPC使用指南</p><p id="07621fbc-53db-4d62-b676-1789a72a0d8b" class="">HATEOAS</p><p id="961f986b-fea7-445f-9fed-bb3c9b13cb32" class="">open-api 与 Swagger</p></details></li></ul><ul id="1ca1cb98-68be-4f32-a40b-50eee51fc0eb" class="toggle"><li><details open=""><summary>权限</summary><p id="f1e10ef0-39ec-43b6-ae51-9b96d89edf11" class="">Cookie Based</p><p id="1c0bfc6f-e9d0-461d-a418-6ccf78862af1" class="">OAuth规范</p><p id="ec69ea8f-0d7b-481a-8cad-d60d9552391b" class="">Basic Auth</p><p id="cfd08e7c-6f1b-49bd-8089-96cb4512fe10" class="">Token Auth</p><p id="8be24792-ca8d-415b-a3e5-1f1d3ae2748f" class="">JWT</p><p id="3f1ca4a1-7ee9-4cb2-a7a0-f6d4d666c484" class="">OpenID</p><p id="6f76d9ab-ebe4-458a-826b-98b49fc0c764" class="">SAML</p></details></li></ul><ul id="0d8bc6de-ca1b-457a-a6c9-332f3504a1c2" class="toggle"><li><details open=""><summary>缓存技术</summary><figure id="393ecf47-d2ab-408f-a317-e534937c926f" class="link-to-page"><a href="DayDayStudy/CDN%E7%BC%93%E5%AD%98%20393ecf47d2ab408fa317e534937c926f.html"><span class="icon">🌍</span>CDN缓存</a></figure><p id="e92c2d18-3ec2-45b7-a68b-4b14f287d6be" class="">Redis做缓存</p><p id="bcff1419-23cd-40a1-b14d-c111d91f7571" class="">Memcached做缓存</p><p id="491cd7f8-8a8a-430e-af54-fb631b75ec27" class="">客户端缓存</p><figure id="f5a0f449-3051-41e1-881f-3cf18a894cf2" class="link-to-page"><a href="DayDayStudy/BigCache%E7%BC%93%E5%AD%98%20f5a0f449305141e1881f3cf18a894cf2.html"><span class="icon">🕢</span>BigCache缓存</a></figure></details></li></ul><ul id="58f7924a-ab19-44d9-a752-7b6becbdd68b" class="toggle"><li><details open=""><summary>Web安全</summary><p id="09a101ed-e696-470b-97e5-69b78d6073a2" class="">哈希加密算法</p><p id="d654119d-23f7-47c0-9015-aa4da496cb2d" class="">HTTPS</p><p id="5eee95c2-84d8-4f8a-9c99-7f61a1847da7" class="">CORS</p><p id="69aa66a0-7c91-48a6-ac50-f5c096c27161" class="">内容安全策略</p><p id="00536218-e6c6-442e-a3cd-3c542f900a9a" class="">SSL/TLS</p><p id="edb8cc3e-ae20-4939-a8af-cb068e1cc069" class="">OWASP安全风险</p><figure id="bb324be7-fe9c-4684-82a0-5925a08277a6" class="link-to-page"><a href="DayDayStudy/%E6%8A%93%E5%8C%85%E6%8A%80%E6%9C%AF%20bb324be7fe9c468482a05925a08277a6.html"><span class="icon">🦈</span>抓包技术</a></figure></details></li></ul><ul id="f4fd4224-d63b-4378-b8f2-4987becc38d3" class="toggle"><li><details open=""><summary>测试与CI/CD</summary><figure id="ca55b5f7-9f9b-4078-89fe-605d11d8deb6" class="link-to-page"><a href="DayDayStudy/gitlab-ci%20yaml%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E6%8A%80%E5%B7%A7%20ca55b5f79f9b407889fe605d11d8deb6.html"><span class="icon">🎮</span>gitlab-ci.yaml的编写与技巧</a></figure></details></li></ul><ul id="013873d9-659c-4d35-a7aa-53b0d57d582c" class="toggle"><li><details open=""><summary>设计开发原则</summary><p id="0181716b-22cb-415d-a297-628d7bba9fc5" class="">设计模式</p></details></li></ul><ul id="a9b8c4e5-b5af-4f10-a126-29154efc7996" class="toggle"><li><details open=""><summary>架构模式</summary><p id="9cf8a827-70a2-495d-8d91-14976b91f533" class="">单体应用</p><p id="13d114d8-059b-43c8-bc6b-72cf25af7f09" class="">微服务</p><p id="7e7bc48f-412d-44ea-a7e9-251d64ecba9c" class="">SOA</p><p id="0ac92936-5747-4d7c-96ba-9eab010eb669" class="">Serverless无服务</p><p id="37b4b941-0d51-48f9-9901-7137a6d2bc0d" class="">CQRS和事件溯源</p></details></li></ul><ul id="f3779844-f3a1-4669-86b5-1489c59aa5ae" class="toggle"><li><details open=""><summary>搜索引擎技术</summary><p id="eafb9d7e-a90c-44b1-8363-172e400a21aa" class="">Elasticsearch搜索技术</p></details></li></ul><ul id="6d73be62-2d53-4ee0-9c66-53e5425f9156" class="toggle"><li><details open=""><summary>消息中间件</summary><p id="b879f276-6ab9-4aa9-bf5b-570319d3ca7d" class="">RocketMQ</p><p id="0cdb132e-c0fc-4eee-bb37-f4806a6f7a47" class="">RabbitMQ</p></details></li></ul><ul id="9c6b2897-895e-4e92-bf8f-300437b0730d" class="toggle"><li><details open=""><summary>容器化与集群化</summary><figure id="cd46cb56-6bdb-434c-96c4-0810d6330754" class="link-to-page"><a href="DayDayStudy/Helm%20cd46cb566bdb434c96c40810d6330754.html"><span class="icon">🚅</span>Helm</a></figure><p id="1d7d3456-2442-4e26-969f-2e6b6ec80b65" class="">Docker的使用</p><p id="10af6bd0-e0e7-40d7-992e-742269173960" class="">k8s的使用</p><p id="3cfa74c4-1f4b-4e61-8281-e61f62d67cb4" class="">偶遇问题集锦</p></details></li></ul><ul id="f127a6e1-7653-44a1-86cc-2f86edca60e5" class="toggle"><li><details open=""><summary>GraphQL与图数据库</summary><blockquote id="4ce4cd90-2bf7-4114-af84-2bc09a832819" class="">其实我不知道这个东西有什么用，暂时看来是用于前端的数据库查询</blockquote><p id="cc46fa87-93f3-4f57-8c37-749446bbb317" class="">Apollo</p><p id="a958731e-f467-4e1c-bae7-7105c87d8d07" class="">Relay Modern</p></details></li></ul><ul id="7c82c028-400e-4738-8ce5-2fd01db87f9a" class="toggle"><li><details open=""><summary>Web代理服务器</summary><p id="34558f3b-43ae-4ad4-a75a-794ad4f60618" class="">Nginx</p><figure id="f3ce05cb-7e43-4d10-a33f-4201494eb5ad" class="link-to-page"><a href="DayDayStudy/%E9%99%90%E6%B5%81%20f3ce05cb7e434d10a33f4201494eb5ad.html"><span class="icon">🧪</span>限流</a></figure></details></li></ul><ul id="14ba874c-f6de-4517-b1b3-a187cc183cba" class="toggle"><li><details open=""><summary>可扩展性服务</summary><p id="00a24653-b6fd-4325-ac79-5dbbdf87dda4" class="">迁移策略</p><p id="453db075-71d7-4d19-a30c-9c9130073037" class="">监控服务</p><p id="aea81e3f-ba11-45c4-ab39-234bf7a038c2" class="">水平扩展与垂直扩展</p></details></li></ul><ul id="4f43b870-04e7-4868-962b-1478b0091a37" class="toggle"><li><details open=""><summary>分布式系统</summary><figure id="7ee4df4d-5da9-43d1-8995-fd434c90cdf0" class="link-to-page"><a href="DayDayStudy/TCC%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%207ee4df4d5da943d18995fd434c90cdf0.html"><span class="icon">🧶</span>TCC分布式事务</a></figure><p id="0a02b5dd-d259-44fc-a725-2e8c95d4e0ee" class="">DDIA学习笔记</p></details></li></ul><ul id="15b81a9c-2b7f-4bd1-b3b9-2083d1f82978" class="toggle"><li><details open=""><summary>学习资料</summary><figure id="4c9fa0f7-e2ee-438d-8a02-bf79455a04e5" class="link-to-page"><a href="DayDayStudy/%E6%95%B0%E5%AD%A6Video%204c9fa0f7e2ee438d8a02bf79455a04e5.html"><span class="icon">🪨</span>数学Video</a></figure><p id="51387302-5682-4e68-a528-67a887faf9b2" class="">
+</p></details></li></ul></div></div></div></article></body></html>

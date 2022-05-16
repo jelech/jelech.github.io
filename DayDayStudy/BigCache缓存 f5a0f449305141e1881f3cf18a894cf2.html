@@ -1,0 +1,789 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>BigCache缓存</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f5a0f449-3051-41e1-881f-3cf18a894cf2" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🕢</span></div><h1 class="page-title">BigCache缓存</h1></header><div class="page-body"><h1 id="6f9b0604-a19a-42f3-9fa0-40b8eee51c19" class=""><strong>bigcache优化技巧</strong></h1><p id="35fdb001-3d60-45cb-b5b6-c42dc52e40cf" class="">最近看到 yoko 翻译的一篇文章: <a href="https://pengrl.com/p/35302/">[译] Go开源项目BigCache如何加速并发访问以及避免高额的GC开销</a>, 翻译自 <a href="https://dev.to/douglasmakey/how-bigcache-avoids-expensive-gc-cycles-and-speeds-up-concurrent-access-in-go-12bb">How BigCache avoids expensive GC cycles and speeds up concurrent access in Go</a>, 应该是 Douglas Makey Mendez Molero 在阅读了 bigcache 的作者写的 bigcache设计文章<a href="https://allegro.tech/2016/03/writing-fast-cache-service-in-go.html">Writing a very fast cache service with millions of entries in Go</a>做的一些调研和总结。</p><p id="967ad164-48ff-4d80-91a1-503a1a83d307" class="">我在刚读取这篇文档的时候，顺着连接把相关的文章都找出来细细读了一遍，结合bigcache的代码，仔细学习了相关的优化设计，感觉设计非常的精妙，所以特意根据自己的理解又总结了一篇。</p><p id="94d8a4b0-c038-41f5-a316-ee8b85970792" class="">bigcache的精妙的设计也吸引了fasthttp的作者Aliaksandr Valialkin，他在bigcache的基础上，结合自己的公司的使用场景，进一步的做了相应的优化， 也开源了这个项目<a href="https://github.com/VictoriaMetrics/fastcache">fastcache</a>, 本文在最后也做了介绍。</p><h2 id="780a0b8f-c35a-4274-ba96-37594b930d16" class=""><strong>设计BigCache的初衷</strong></h2><p id="1fcbf25e-28b2-4ef0-a3e6-d37f02ae49de" class="">bigcache的作者也不是想当然的开发一个库，而且项目遇到了需求。需求如下：</p><ul id="f2e29c61-32e1-4537-82a4-e1a4bef6767d" class="bulleted-list"><li style="list-style-type:disc">支持http协议</li></ul><ul id="e43e374c-ba2c-4c85-8d27-c0800dfa1e8c" class="bulleted-list"><li style="list-style-type:disc">支持 <strong>10K</strong> RPS (5k 写，5k 读)</li></ul><ul id="613b2b3e-dc2d-44ce-ac07-6dc754a25568" class="bulleted-list"><li style="list-style-type:disc">cache对象至少保持10分钟</li></ul><ul id="e48a2db1-80b8-41a7-afaf-b6635aef0560" class="bulleted-list"><li style="list-style-type:disc">相应时间平均 5ms, p99.9 10毫秒， p99.999 400毫秒</li></ul><ul id="8e67e1aa-36c2-443e-ba68-8a9b43c54920" class="bulleted-list"><li style="list-style-type:disc">其它HTTP的一些需求</li></ul><p id="de459078-2e8c-4430-920b-ba70a7bb4b0d" class="">为了满足这些需求,要求开发的cache库要保证：</p><ul id="997463a1-19ef-450f-81e2-7a30bdab8b3f" class="bulleted-list"><li style="list-style-type:disc">即使有百万的缓存对象也要非常快</li></ul><ul id="fad26d9b-15d6-4c44-b968-96b2b7060aec" class="bulleted-list"><li style="list-style-type:disc">支持大并发访问</li></ul><ul id="fb051b47-f27e-4bfc-8e25-e4ed69c91204" class="bulleted-list"><li style="list-style-type:disc">一定时间后支持剔除</li></ul><p id="ccbbe620-c8eb-467f-87c4-3d9fd79d1b19" class="">作者考察了一番缓存框架比如memcached、redis、couchbase等，发觉都不太满足需求，因为这些都是独立的程序，访问它们需要网络的开销，延时无法保障，作者需要一个进程内的基于内存的cache库。虽然Go生态圈有众多的cache库如 <a href="https://github.com/golang/groupcache/tree/master/lru">LRU groups cache</a>, <a href="https://github.com/patrickmn/go-cache">go-cache</a>, <a href="https://github.com/diegobernardes/ttlcache">ttlcache</a>, <a href="https://github.com/coocood/freecache">freecache</a>,但是只有freecache满足需求，不过作者最后还是决定自己取开发一个cache库。</p><p id="35ebd5fd-437b-43a4-995e-16c80bf534d9" class="">以上是bigcache诞生的背景，接下来我们欣赏一下bigcache和其它库优美的设计。</p><h2 id="bc29a78e-034c-42a9-83d5-d674e3f40e9b" class=""><strong>处理大并发访问</strong></h2><p id="df455e0c-0a5b-44c2-8ca0-07ef2c01bf37" class="">cache就像一个大的hashtable, 可不可以使用一个<code>map[string][]byte</code> + <code>sync.RWMutex</code> 实现满足需求的cache呢？</p><p id="f14b388b-2d24-4f96-90b7-c641a3ae4b99" class=""><code>sync.RWMutex</code>虽然对读写进行了优化，但是对于并发的读，最终还是把写变成了串行，一旦写的并发量大的时候，即使写不同的key, 对应的goroutine也会block住，只允许一个写执行，这是一个瓶颈，并且不可控。</p><p id="618023b8-a365-42b9-aeea-f7b7b41e6a56" class="">解决并发的问题有一个方法叫做 shard (分片), 每个分片一把锁。 很多大并发场景下为了减小并发的压力都会采用这种方法，大的场景比如数据库的分片，小的场景就如刚才的场景。 Java 8 之前的ConcurrentMap就是采用分片(segment)的方式减少竞争, Go也有一个类似思想设计的map库:<a href="https://github.com/orcaman/concurrent-map">concurrent-map</a>。</p><p id="ad10e30b-097d-41b9-a8c0-2c7bb348b6ba" class="">对于每一个缓存对象，根据它的key计算它的哈希值: <code>hash(key) % N</code>, <code>N</code>是分片数量。 理想情况下N个 goroutine 每次请求正好平均落在各自的分片上，这样就不会有竞争了，即使有多个goroutine落在同一个分片上，如果hash比较平均的话，单个shard的压力也会比较小。</p><p id="968f7499-978f-409d-bd8d-e0a1dd01be54" class="">竞争小了有什么好处？ 延迟可以大大提高，因为等待获取锁的时间变小了。</p><p id="faf50422-ef14-48e5-9ee2-7aee205804ae" class="">当然这里有一些要考虑的地方：</p><p id="d419241b-0b02-47ae-affa-bb4691c2b4a7" class=""><strong>1、N的选择</strong></p><p id="674629c7-ef49-4192-b4b4-fab3f75eca6f" class="">既然分片可以很好的降低锁的竞争，那么N是不是越大越好呢？当然不是，如果N非常大，比如每个缓存对象一个锁，那么会带来很多额外的不必要的开销。可以选择一个不太大的值，在性能和花销上寻找一个平衡。</p><p id="39e33ec7-8f0c-43a3-8969-6e08269992bc" class="">另外, <code>N</code>是 2的幂， 比如16、32、64。这样设计的好处就是计算余数可以使用位运算快速计算。</p><pre id="ba30588a-23fa-4c8c-9f16-742fcfebeef0" class="code code-wrap"><code>func (c *BigCache) getShard(hashedKey uint64) (shard *cacheShard) {
+	return c.shards[hashedKey&amp;c.shardMask]
+}</code></pre><p id="d8386627-8421-4e67-aa16-905993a3d4e7" class="">因为对于2的幂<code>N</code>，对于任意的<code>x</code>, 下面的公式成立:</p><pre id="877e7cb0-1acf-4328-90bd-962cb3f53c11" class="code code-wrap"><code>x mod N = (x &amp; (N − 1))</code></pre><p id="1c477673-39c1-458c-8524-670c60ef8916" class="">所以只需要使用一次按位AND (<code>&amp;</code>)就可以求得它的余数。</p><p id="d91b1993-e6ce-48b8-bf82-6d133302116a" class=""><strong>2、选择hash算法</strong></p><p id="b13da0a1-378f-4a6d-913d-517f9280b16a" class="">以前已经有非常多的哈希算法，最近几年也出现了一些新的哈希算法，也被人使用Go语言来实现。</p><p id="6c427e69-2c6f-4e39-a30b-bc8c0edcf396" class="">很显然，一个优秀的哈希算法要保证:</p><ul id="5b5048af-fb88-4f4a-a7f8-dbbb2db4c16c" class="bulleted-list"><li style="list-style-type:disc">哈希值应该比较随机 (质量)</li></ul><ul id="908397d2-566b-4dca-b4ee-140cb8dc6dd7" class="bulleted-list"><li style="list-style-type:disc">哈希速度比较快 (速度)</li></ul><ul id="ff4e2969-903f-46b9-9374-7891cdc72579" class="bulleted-list"><li style="list-style-type:disc">尽量不产生额外的内存分配,避免对垃圾回收产生压力 (耗费资源少)</li></ul><p id="fef9fd1f-b81b-45a9-96b5-7f35ff4a9ab7" class="">项目<a href="https://github.com/smallnest/hash-bench">hash-bench</a>对常用的几种Hash算法进行了比较。</p><p id="b929a644-985c-46d1-8f62-98df2a790c14" class="">bigcache提供了一个默认的Hash的实现，采用fnv64a算法。这个算法的好处是采用位运算的方式在栈上进行运算，避免在堆上分配。</p><pre id="c97501d7-0866-435e-ac43-15bbf45cf164" class="code code-wrap"><code>type fnv64a struct{}
+const (
+	// offset64 FNVa offset basis. See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
+	offset64 = 14695981039346656037
+	// prime64 FNVa prime value. See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
+	prime64 = 1099511628211
+)
+// Sum64 gets the string and returns its uint64 hash value.
+func (f fnv64a) Sum64(key string) uint64 {
+	var hash uint64 = offset64
+	for i := 0; i &lt; len(key); i++ {
+		hash ^= uint64(key[i])
+		hash *= prime64
+	}
+	return hash
+}</code></pre><h2 id="a328809d-6d17-4d7d-ba41-2c53f1d371b9" class=""><strong>忽略内存开销</strong></h2><p id="3e32cb0b-ec65-455a-a6ba-eb291e9f963a" class="">对于Go语言中的map, 垃圾回收器在 <code>mark</code>和<code>scan</code>阶段检查map中的每一个元素, 如果缓存中包含数百万的缓存对象，垃圾回收器对这些对象的无意义的检查导致不必要的时间开销。</p><p id="5e11e09a-1f7b-4cd2-8cb9-b7a432eb6802" class="">bigcache的作者做了测试。他们测试了简单的HTTP/JSON序列化(不会访问cache)。 在cache为空的时候1万的QPS的耗时大约10毫秒。当cache填满的时候， P99的请求都会超过1秒。监控显示堆中包含4千万的对象， GC过程中的 <code>mark</code> 和 <code>scan</code> 也需要4秒。</p><p id="42674611-b989-4166-a849-9d729972ea29" class="">我们可以很容易测试这种状况，比如下面的代码：</p><pre id="dbeefa46-2f0e-4443-a168-4b1eb6a669e6" class="code code-wrap"><code>package main
+import &quot;time&quot;
+type Item struct {
+	A string
+	B string
+	C string
+	D string
+	E string
+	F string
+	G string
+}
+type G struct {
+	H int
+	I int
+	K int
+	L int
+	M int
+	N int
+}
+func main() {
+	m := make(map[int]*Item, 10*1024*1024)
+	for i := 0; i &lt; 1024*1024; i++ {
+		m[i] = &amp;Item{}
+	}
+	for i := 0; ; i++ {
+		delete(m, i)
+		m[1024*1024+i] = &amp;Item{}
+		time.Sleep(10 * time.Millisecond)
+	}
+}</code></pre><p id="cd7b805c-6668-41e8-ab74-d067a32e1194" class="">只有一个map对象，里面包含一百万的元素，每10毫秒删一个放一个。并发量相当小，并且单个的goroutine也没有竞争，但是由于元素的数量巨大，垃圾回收在<code>mark/scan</code>阶段需要花费上百毫秒进行标记和遍历。</p><figure id="25333e08-bacd-49de-97a2-4016f27bd6ef" class="image"><a href="https://colobu.com/2019/11/18/how-is-the-bigcache-is-fast/gc.png"><img style="width:672px" src="https://colobu.com/2019/11/18/how-is-the-bigcache-is-fast/gc.png"/></a></figure><p id="24744612-4ee1-468a-928d-e94de0e633e5" class="">那么如何解决这个问题呢？</p><p id="7a294387-6a6b-4faf-9de8-768ea8f61078" class="">我们知道垃圾回收器检查的是堆上的资源，如果不把对象放在堆上，不就解决这个问题了吗？还真有这样的项目<a href="https://godoc.org/github.com/glycerine/offheap">offheap</a>，它提供了定制的<code>Malloc()</code> 和 <code>Free()</code>，但是你的缓存需要基于这些方法定制。当然一些基于垃圾回收的编程语言为了减少垃圾回收的时间，都会提供相应的库，比如<a href="https://dzone.com/articles/java-chroniclemap-part-1-go-off-heap">Java: ChronicleMap, Part 1: Go Off-Heap</a>。堆外内存很容易产生内存泄漏。</p><p id="7c6c2c98-cd23-4041-b020-1f791def4004" class="">第二种方式是使用<a href="https://github.com/coocood/freecache">freecache</a>。freecache通过减少指针的数量以零GC开销实现map。它将键和值保存在<code>ringbuffer</code>中，并使用索引查找对象。</p><p id="6e78a7f8-c149-4d6a-80eb-4f372c759850" class="">第三种优化方法是和Go 1.5中一个修复有关(<a href="https://github.com/golang/go/issues/9477">#9477</a>), 这个issue还是描述了包含大量对象的map的垃圾回收时的耗时问题，Go的开发者优化了垃圾回收时对于map的处理，如果map对象中的key和value不包含指针，那么垃圾回收器就会对它们进行优化：</p><blockquote id="a38f0213-6d86-4248-af90-0fddf672b6a0" class="">runtime: do not scan maps when k/v do not contain pointersCurrently we scan maps even if k/v does not contain pointers.This is required because overflow buckets are hanging off the main table.This change introduces a separate array that contains pointers to alloverflow buckets and keeps them alive. Buckets themselves are markedas containing no pointers and are not scanned by GC (if k/v does notcontain pointers).This brings maps in line with slices and chans -- GC does not scantheir contents if elements do not contain pointers.Currently scanning of a map[int]int with 2e8 entries (~8GB heap)takes ~8 seconds. With this change scanning takes negligible time.https://go-review.googlesource.com/c/go/+/3288</blockquote><p id="695cdef7-e363-4be1-885c-542c5c2235d1" class="">所以如果我们的对象不包含指针，虽然也是分配在堆上，但是垃圾回收可以无视它们。</p><p id="b8d8a5e5-8041-4755-bc43-3239829dff49" class="">如果我们把map定义成<code>map[int]int</code>，就会发现gc的耗时就会将下来了。</p><figure id="c8d2c6b9-e6b6-4fff-9b6b-33e7da8a563d" class="image"><a href="https://colobu.com/2019/11/18/how-is-the-bigcache-is-fast/gc2.png"><img src="https://colobu.com/2019/11/18/how-is-the-bigcache-is-fast/gc2.png"/></a></figure><p id="b8b4a809-5010-48bc-a3e8-bb8fafe914ba" class="">遗憾的是，我们没办法要求用户的缓存对象只能包含<code>int</code>、<code>bool</code>这样的基本数据类型。</p><p id="d5378744-93f2-4c17-a3a8-9324c0afd1a0" class="">解决办法就是使用哈希值作为<code>map[int]int</code>的key。 把缓存对象序列化后放到一个预先分配的大的字节数组中，然后将它在数组中的offset作为<code>map[int]int</code>的value。</p><pre id="f3b876ee-481e-43d0-ab84-463d2ca3a144" class="code code-wrap"><code>type cacheShard struct {
+	hashmap     map[uint64]uint32
+	entries     queue.BytesQueue
+	lock        sync.RWMutex
+	entryBuffer []byte
+	onRemove    onRemoveCallback
+	isVerbose    bool
+	statsEnabled bool
+	logger       Logger
+	clock        clock
+	lifeWindow   uint64
+	hashmapStats map[uint64]uint32
+	stats        Stats
+}
+func (s *cacheShard) set(key string, hashedKey uint64, entry []byte) error {
+	currentTimestamp := uint64(s.clock.epoch())
+	s.lock.Lock()
+    // 查找是否已经存在了对应的缓存对象，如果存在，将它的值置为空
+	if previousIndex := s.hashmap[hashedKey]; previousIndex != 0 {
+		if previousEntry, err := s.entries.Get(int(previousIndex)); err == nil {
+			resetKeyFromEntry(previousEntry)
+		}
+	}
+    // 触发是否要移除最老的缓存对象
+	if oldestEntry, err := s.entries.Peek(); err == nil {
+		s.onEvict(oldestEntry, currentTimestamp, s.removeOldestEntry)
+	}
+    // 将对象放入到一个字节数组中，如果已有的字节数组(slice)可以放得下此对象，则重用，否则新建一个字节数组
+	w := wrapEntry(currentTimestamp, hashedKey, key, entry, &amp;s.entryBuffer)
+	for {
+        // 尝试放入到字节队列中，成功则加入到map中
+		if index, err := s.entries.Push(w); err == nil {
+			s.hashmap[hashedKey] = uint32(index)
+			s.lock.Unlock()
+			return nil
+        }
+        // 如果空间不足，移除最老的元素
+		if s.removeOldestEntry(NoSpace) != nil {
+			s.lock.Unlock()
+			return fmt.Errorf(&quot;entry is bigger than max shard size&quot;)
+		}
+	}
+}
+func wrapEntry(timestamp uint64, hash uint64, key string, entry []byte, buffer *[]byte) []byte {
+	keyLength := len(key)
+	blobLength := len(entry) + headersSizeInBytes + keyLength
+	if blobLength &gt; len(*buffer) {
+		*buffer = make([]byte, blobLength)
+	}
+	blob := *buffer
+	binary.LittleEndian.PutUint64(blob, timestamp)
+	binary.LittleEndian.PutUint64(blob[timestampSizeInBytes:], hash)
+	binary.LittleEndian.PutUint16(blob[timestampSizeInBytes+hashSizeInBytes:], uint16(keyLength))
+	copy(blob[headersSizeInBytes:], key)
+	copy(blob[headersSizeInBytes+keyLength:], entry)
+	return blob[:blobLength]
+}</code></pre><p id="d30f0280-1a80-418f-be0e-80d66a1d3b7a" class=""><code>queue.BytesQueue</code>是一个字节数组，可以做到按需分配。当加入一个<code>[]byte</code>时，它会把数据copy到尾部。</p><p id="e6c95507-cb83-43df-bf40-854c67b663c1" class="">值得注意的是删除缓存元素的时候bigcache只是把它从的索引从<code>map[uint64]uint32</code>中删除了，并把它在<code>queue.BytesQueue</code>队列中的长度置为0。那么删除操作会不会在<code>queue.BytesQueue</code>中造成很多的“虫洞”？从它的实现上来看，<strong>会</strong>, 而且这些&quot;虫洞&quot;不会被整理，也不会被移除。因为它的底层是使用一个字节数组实现的，&quot;虫洞&quot;的移除是一个耗时的操作，会导致锁的持有时间过长。 那么寻找合适的&quot;虫洞&quot;重用呢？虽然遍历的方法寻找&quot;虫洞&quot;也是一个比较耗时的操作，我觉得这里有优化的空间。</p><p id="3b98ab30-1268-4d6f-9a50-7ea30f3a4ea7" class="">bigcache只能等待清理最老的元素的时候把这些&quot;虫洞&quot;删除掉。</p><h2 id="55c42dfc-7135-42de-97b5-84e64dde97a6" class=""><strong>剔除</strong></h2><p id="19a45051-667f-47b8-a193-ecd737642686" class="">对于 bigcache来说， 剔除还有意义吗？或许有。如果我们不想使用某个key的缓存对象，我们可以把它删除。</p><p id="aebb6a43-53c3-4854-b91a-321cb6dc7827" class="">首先，在增加一个元素之前，会检查最老的元素要不要删除。</p><pre id="f66a9d7b-d364-4fdb-b224-71b10c42ddec" class="code code-wrap"><code>if oldestEntry, err := s.entries.Peek(); err == nil {
+	s.onEvict(oldestEntry, currentTimestamp, s.removeOldestEntry)
+   }</code></pre><p id="8d8643bf-4e1f-429c-9926-808d2bfd2d85" class="">其次，在添加一个元素失败后，会清理空间删除最老的元素。</p><p id="f334d26a-e73e-49ac-8547-bc234aafd5df" class="">同时， 还会专门有一个定时的清理goroutine, 负责移除过期数据。</p><p id="740675ed-aaa1-436a-b668-f949894e30c2" class="">另外需要注意的是缓存对象没有读取的时候刷新过期时间的功能，所以放入的缓存对象最终免不了过期的命运。</p><p id="c0818e55-7835-4b8b-af29-50abac75c066" class="">另外所有的缓存对象的<code>lifewindow</code>都是一样的，比如30分钟、两小时。</p><p id="e5d9c24c-7d86-45d0-a489-6d27b4875241" class="">所以，如果你真的使用bigcache, 还是得需要注意它的这些设计，看看这些设计是否和你的场景相吻合。</p><h2 id="7ecdb9c1-9b8f-4cdb-b892-f3119f15dc38" class=""><strong>fastcache</strong></h2><p id="6e098036-99c0-40af-a23c-ab32c10eb3cc" class="">bigcache在特定时候还是有问题，就是当<code>queue.BytesQueue</code>的容量不够的时候，它会进行扩展，扩展是一个很重的操作，它会复制原来的数据到新的字节数组上。</p><p id="a40437ae-a8fc-407b-8a04-9c28e14d7d6e" class="">fasthttp 的作者采用类似bigcache的思想实现了<a href="https://github.com/VictoriaMetrics/fastcache">fastcache</a>，他使用<code>chunks [][]byte</code>替换<code>queue.BytesQueue</code>，chunk是一个 ring buffer, 每个chunk 64KB。</p><pre id="9c425f59-73a9-4682-9aa7-ca97028c725c" class="code code-wrap"><code>type bucket struct {
+	mu sync.RWMutex
+	// chunks is a ring buffer with encoded (k, v) pairs.
+	// It consists of 64KB chunks.
+	chunks [][]byte
+	// m maps hash(k) to idx of (k, v) pair in chunks.
+	m map[uint64]uint64
+	// idx points to chunks for writing the next (k, v) pair.
+	idx uint64
+	// gen is the generation of chunks.
+	gen uint64
+	getCalls    uint64
+	setCalls    uint64
+	misses      uint64
+	collisions  uint64
+	corruptions uint64
+}</code></pre><p id="9ac162ef-382c-40c2-9e6c-2ed7b84b0d7c" class="">虽然<code>chunks [][]byte</code>也包含很多的chunk, 但是由于chunk的size比较大，所以可以大大缩小垃圾回收需要mark/scan的对象的数量。带来的好处就是扩容的时候只需要增加更多的chunk即可。</p><p id="e575566c-203d-4f0b-8bdb-64886f3b1499" class="">删除还是一样，只是从map中删除，不会从<code>chunks</code>中删除。</p><p id="9816768b-5c90-4573-9000-0a7624a2d2af" class="">fastcache没有过期的概念，所以缓存对象不会被过期剔除。</p></div></article></body></html>
