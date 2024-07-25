@@ -28,6 +28,11 @@ exclude:
   - not-pure-poole.gemspec
   - vendor
 
+collections:
+  daily:
+    output: true
+    permalink: /:collection/:path/
+
 # Optimize Jekyl SEO Tag
 twitter:
   username: jelech
