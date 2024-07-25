@@ -15,6 +15,9 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
 
+include:
+  - _daily
+
 # Optimize Jekyll
 exclude:
   - .editorconfig
