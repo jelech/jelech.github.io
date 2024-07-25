@@ -44,7 +44,7 @@ jobs:
           FILTER_PROP: Status
           FILTER_VALUES: Published
           CONVERT_PROP_CASE: snake
-          ARTICLE_PATH: _posts/2020-01-01-{id}.md
+          ARTICLE_PATH: _posts/{id}.md
           ASSETS_PATH: ./assets/
           PARALLEL_PAGES: 25
           PARALLEL_DOWNLOADS_PER_PAGE: 3
