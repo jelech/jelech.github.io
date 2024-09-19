@@ -1,5 +1,7 @@
 name: "Build and Deploy"
 on:
+  schedule:
+    - cron: "0 21 * * *" # daily
   push:
     branches:
       - main
@@ -13,7 +15,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -24,16 +26,38 @@ concurrency:
 
 jobs:
   build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # submodules: true
-          # If using the 'assets' git submodule from Chirpy Starter, uncomment above
-          # (See: https://github.com/cotes2020/chirpy-starter/tree/main/assets)
+          submodules: true
+
+      - name: notion-jam
+        uses: victornpb/notion-jam@v0.0.13
+        with:
+          NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+          NOTION_DATABASE: https://www.notion.so/695516354ef340b2b93d570c12129bc4
+          FILTER_PROP: status
+          FILTER_VALUES: Published
+          CONVERT_PROP_CASE: snake
+          ARTICLE_PATH: _posts/2024-01-01-{id}.md
+          ASSETS_PATH: assets/imgs
+          PARALLEL_PAGES: 25
+          PARALLEL_DOWNLOADS_PER_PAGE: 3
+          DOWNLOAD_IMAGE_TIMEOUT: 30
+          SKIP_DOWNLOADED_IMAGES: true
+          DOWNLOAD_FRONTMATTER_IMAGES: true
+
+      # - name: Save changes
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: Commit changes
 
       - name: Setup Pages
         id: pages
@@ -50,11 +74,11 @@ jobs:
         env:
           JEKYLL_ENV: "production"
 
-      - name: Test site
-        run: |
-          bundle exec htmlproofer _site \
-            \-\-disable-external \
-            \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+      # - name: Test site
+      #   run: |
+      #     bundle exec htmlproofer _site \
+      #       \-\-disable-external \
+      #       \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3

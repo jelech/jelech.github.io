@@ -3,8 +3,12 @@
 - type: github
   icon: "fab fa-github"
 
-- type: twitter
-  icon: "fa-brands fa-x-twitter"
+# - type: twitter
+#   icon: "fa-brands fa-x-twitter"
+
+- type: wechat
+  icon: "fa-brands fa-weixin"
+  url: "wexin://jelech"
 
 - type: email
   icon: "fas fa-envelope"
