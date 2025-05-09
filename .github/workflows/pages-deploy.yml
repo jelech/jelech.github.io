@@ -54,10 +54,29 @@ jobs:
           SKIP_DOWNLOADED_IMAGES: true
           DOWNLOAD_FRONTMATTER_IMAGES: true
 
-      # - name: Save changes
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: Commit changes
+      # 更新 README.md 文件的最后一行为当前日期时间
+      - name: Update README.md with current date
+        run: |
+          # 如果README.md不存在则创建
+          if [ ! -f README.md ]; then
+            echo "# Repository" > README.md
+          fi
+          
+          # 获取当前日期时间
+          CURRENT_DATE=$(date "+%Y-%m-%d %H:%M:%S")
+          
+          # 移除最后一行如果它包含"最后更新时间"
+          sed -i '/最后更新时间:/d' README.md
+          
+          # 添加带有当前日期的新行
+          echo -e "\n最后更新时间: ${CURRENT_DATE}" >> README.md
+
+      # 提交更改到仓库
+      - name: Commit changes to README
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "自动更新: 更新 README 最后更新时间"
+          file_pattern: README.md
 
       - name: Setup Pages
         id: pages
